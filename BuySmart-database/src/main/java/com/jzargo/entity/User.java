@@ -1,10 +1,7 @@
 package com.jzargo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,6 +13,8 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"products", "cart"})
+@ToString(exclude = {"products", "cart"})
 public class User implements BaseEntity<Long>{
 
     @Id
@@ -28,12 +27,15 @@ public class User implements BaseEntity<Long>{
     @Column(name = "profile_image")
     private String ProfileImage;
 
-    @Column(name = "created_at")
+    @Column(name = "created_on")
     private LocalDate createdTime;
+
+    @OneToOne(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
 
     @OneToMany(mappedBy = "user")
     @Builder.Default
-    private List<Product> products = new ArrayList<>();
+    private List<Product> OwnProducts = new ArrayList<>();
 
 
     private String username;

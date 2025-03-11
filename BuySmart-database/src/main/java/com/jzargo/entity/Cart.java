@@ -6,24 +6,31 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Data
 @Entity
-@Table(name = "shopping_cart")
-public class Cart {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "carts")
+public class Cart implements BaseEntity<Long>{
 
-    // Relation because in a bargain something like relation between buyer and owner
-    @EmbeddedId
-    private Relation relation;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column("last_added_at")
-    private LocalDate LastUpdate;
+    @OneToOne
+    @JoinColumn(name = "buyer_id", nullable = false, unique = true)
+    private User buyer;
 
-    private Float payment;
-    private Integer quantity;
+    @ManyToMany
+    @JoinTable(
+            name = "cart_items",
+            joinColumns = @JoinColumn(name = "cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> items = new ArrayList<>();
 
 }

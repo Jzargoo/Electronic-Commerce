@@ -1,1 +1,0 @@
-ALTER TABLE shopping_cart RENAME COLUMN added_at TO last_added_on

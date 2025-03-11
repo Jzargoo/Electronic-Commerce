@@ -1,4 +1,5 @@
 rootProject.name = 'BuySmart'
 include 'BuySmart-database'
 include 'BuySmart-starter'
+include 'BuySmart-integration-tests'
 
