@@ -13,8 +13,8 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"products", "cart"})
-@ToString(exclude = {"products", "cart"})
+@EqualsAndHashCode
+@ToString
 public class User implements BaseEntity<Long>{
 
     @Id
@@ -27,6 +27,7 @@ public class User implements BaseEntity<Long>{
     @Column(name = "profile_image")
     private String ProfileImage;
 
+
     @Column(name = "created_on")
     private LocalDate createdTime;
 
@@ -38,6 +39,15 @@ public class User implements BaseEntity<Long>{
     private List<Product> OwnProducts = new ArrayList<>();
 
 
+    @OneToMany(mappedBy = "buyer")
+    @Builder.Default
+    private List<Order> orders = new ArrayList<>();
+
     private String username;
     private String password;
+
+    public void setCart(Cart cart){
+        this.cart=cart;
+        cart.setBuyer(this);
+    }
 }

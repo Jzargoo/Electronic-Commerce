@@ -1,7 +1,9 @@
 package com.jzargo.entity;
 
+import com.jzargo.common.Categories;
+import com.jzargo.common.Tags;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,6 +11,11 @@ import java.util.List;
 
 @Entity
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString(exclude = "user")
+@EqualsAndHashCode(exclude = "user")
 @Table(name = "products")
 public class Product implements BaseEntity<Integer>{
     @Id
@@ -20,15 +27,17 @@ public class Product implements BaseEntity<Integer>{
     private User user;
 
     @Column(name = "created_at")
-    LocalDateTime created;
+    private LocalDateTime created;
 
     @ElementCollection
+    @Builder.Default
     @CollectionTable(name = "Product_images",joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "image")
     List<String> images = new ArrayList<>();
 
     @Enumerated(value = EnumType.STRING)
     @ElementCollection
+    @Builder.Default
     @CollectionTable(name = "Product_tags",joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "tag")
     List<Tags> tags = new ArrayList<>();
@@ -36,4 +45,9 @@ public class Product implements BaseEntity<Integer>{
     private String name;
     private String description;
     private Float price;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name="category")
+    private Categories category;
+
 }

@@ -1,26 +1,46 @@
 package database;
-
-import com.jzargo.entity.Cart;
-import com.jzargo.repository.CartRepository;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
+import Annotations.IT;
+import com.jzargo.Application;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+
+import com.jzargo.entity.Cart;
+import com.jzargo.entity.User;
+import com.jzargo.repository.CartRepository;
+import com.jzargo.repository.UserRepository;
 @IT
+@ContextConfiguration(classes = Application.class)
 public class CartAndCartRepositoryIntegrationTest {
-    final CartRepository cartRepository;
 
-    public CartAndCartRepositoryIntegrationTest(CartRepository cartRepository) {
-        this.cartRepository = cartRepository;
-    }
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
-    public void save(){
-        Cart cart= Cart.builder()
-                .payment(14.30F)
-                .quantity(2)
-                .LastUpdate(LocalDate.now())
+    public void testSaveCart() {
+
+        User user = User.builder()
+                .username("test_user")
+                .password("securepassword")
+                .phone("+77773662100")
                 .build();
+        User savedUser = userRepository.save(user);
+
+        Cart cart = new Cart();
+        cart.setBuyer(savedUser);
+
+        Cart savedCart = cartRepository.save(cart);
+
+        assertNotNull(savedCart.getId());
+        assertThat(savedCart.getBuyer()).isEqualTo(savedUser);
     }
 }
+

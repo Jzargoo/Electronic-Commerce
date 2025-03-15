@@ -1,19 +1,19 @@
 package com.jzargo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Data
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "buyer")
+@EqualsAndHashCode(exclude = "buyer")
 @Table(name = "carts")
 public class Cart implements BaseEntity<Long>{
 
@@ -21,16 +21,14 @@ public class Cart implements BaseEntity<Long>{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @OneToOne
     @JoinColumn(name = "buyer_id", nullable = false, unique = true)
     private User buyer;
 
-    @ManyToMany
-    @JoinTable(
-            name = "cart_items",
-            joinColumns = @JoinColumn(name = "cart_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> items = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<CartItem> items = new ArrayList<>();
 
 }
