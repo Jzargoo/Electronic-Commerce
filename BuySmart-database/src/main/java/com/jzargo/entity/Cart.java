@@ -31,4 +31,8 @@ public class Cart implements BaseEntity<Long>{
     @Builder.Default
     private List<CartItem> items = new ArrayList<>();
 
+    public void addCartItem(CartItem ci){
+        items.add(ci);
+        ci.setCart(this);
+    }
 }

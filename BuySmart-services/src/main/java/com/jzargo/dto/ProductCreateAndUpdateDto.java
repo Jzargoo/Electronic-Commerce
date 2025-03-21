@@ -18,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class ProductCreateAndUpdateDto {
-    private LocalDateTime created;
     @Size(min = 1, message = "Tags cannot be empty")
     private List<Tags> tags;
     @Size(min = 1, message = "At least one image should be uploaded")
@@ -29,4 +28,5 @@ public class ProductCreateAndUpdateDto {
     @NotNull(message = "Product price cannot be null")
     @Positive(message = "Price must be a positive number")
     private Float price;
+    private Long userId;
 }

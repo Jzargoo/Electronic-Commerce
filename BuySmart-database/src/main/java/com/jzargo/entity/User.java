@@ -29,7 +29,8 @@ public class User implements BaseEntity<Long>{
 
 
     @Column(name = "created_on")
-    private LocalDate createdTime;
+    @Builder.Default
+    private LocalDate createdTime = LocalDate.now();
 
     @OneToOne(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;

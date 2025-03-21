@@ -21,7 +21,9 @@ public class UserCreateAndUpdateMapper implements Mapper<UserCreateAndUpdateDto,
 
     @Override
     public User map(UserCreateAndUpdateDto object) {
-        return getBuild(object, new User());
+        // It was the builder that creates empty lists, not the constructor which sets them to null.
+        // So builder just more comfortable because I do not need to write new ArrayList
+        return getBuild(object, User.builder().build());
     }
 
     private User getBuild(UserCreateAndUpdateDto object, User user) {

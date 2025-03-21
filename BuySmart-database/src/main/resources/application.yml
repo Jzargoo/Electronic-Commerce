@@ -1,4 +1,13 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
+
+  liquibase:
+    user: postgres
+    password: root
+    url: jdbc:postgresql://localhost:5432/buysmart
+    driver-class-name: org.postgresql.Driver
+
   datasource:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}

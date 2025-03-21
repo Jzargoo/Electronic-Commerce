@@ -29,4 +29,7 @@ public class CartItem {
 
     private int quantity;
 
+    public void increaseQuantity(Integer quantity) {
+        this.quantity += quantity;
+    }
 }

@@ -11,6 +11,7 @@ public class ProductReadMapper implements Mapper<Product, ProductReadDto> {
         return ProductReadDto.builder()
                 .tags(object.getTags())
                 .id(object.getId())
+                .images(object.getImages())
                 .price(object.getPrice())
                 .name(object.getName())
                 .description(object.getDescription())

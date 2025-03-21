@@ -30,10 +30,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserReadDto findById(Long id) {
+    public Optional<UserReadDto> findById(Long id) {
         return userRepository.findById(id)
-                .map(userReadMapper::map)
-                .orElseThrow();
+                .map(userReadMapper::map);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class UserServiceImpl implements UserService{
         return Optional.ofNullable(userCreateAndUpdateMapper.map(dto))
                 .map(user -> {
                     user.setProfileImage(
-                            imageStorageServiceImpl.storeFile(dto.getProfileImage())
+                            imageStorageServiceImpl.storeUserFile(dto.getProfileImage())
                     );
                     return userRepository.saveAndFlush(user);
                 })
@@ -64,7 +63,7 @@ public class UserServiceImpl implements UserService{
         return Optional.ofNullable(userCreateAndUpdateMapper.map(dto, old))
                 .map(user -> {
                     user.setProfileImage(
-                        imageStorageServiceImpl.storeFile(dto.getProfileImage())
+                        imageStorageServiceImpl.storeUserFile(dto.getProfileImage())
                     );
                     return userRepository.saveAndFlush(user);
                 })
@@ -84,7 +83,7 @@ public class UserServiceImpl implements UserService{
                 !(exist && old.getProfileImage()
                         .equals(System.getenv("DUMMY")))
         ) {
-            imageStorageServiceImpl.deleteFile(old.getProfileImage());
+            imageStorageServiceImpl.deleteUserFile(old.getProfileImage());
         }
 
         return exist;

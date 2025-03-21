@@ -7,7 +7,6 @@ import com.jzargo.mapper.ProductCreateAndUpdateMapper;
 import com.jzargo.mapper.ProductReadMapper;
 import com.jzargo.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -16,13 +15,15 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductReadMapper productReadMapper;
     private final ProductCreateAndUpdateMapper productCreateAndUpdateMapper;
+    private final ImageStorageService imageStorageService;
 
     public ProductServiceImpl(ProductRepository productRepository,
                               ProductReadMapper productReadMapper,
-                              ProductCreateAndUpdateMapper productCreateAndUpdateMapper) {
+                              ProductCreateAndUpdateMapper productCreateAndUpdateMapper, ImageStorageService imageStorageService) {
         this.productRepository = productRepository;
         this.productReadMapper = productReadMapper;
         this.productCreateAndUpdateMapper = productCreateAndUpdateMapper;
+        this.imageStorageService = imageStorageService;
     }
 
     @Override
@@ -41,17 +42,32 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductReadDto create(ProductCreateAndUpdateDto dto) {
-        return Optional.ofNullable(productCreateAndUpdateMapper.map(dto))
-                .map(productRepository::saveAndFlush)
-                .map(productReadMapper::map)
-                .orElseThrow();
+        Product product = productCreateAndUpdateMapper.map(dto);
+        if (product == null) {
+            throw new IllegalStateException("Mapping resulted in null product");
+        }
+
+        List<String> savedImages = imageStorageService.storeProductFiles(dto.getImages());
+        product.setImages(savedImages);
+
+        Product savedProduct = productRepository.saveAndFlush(product);
+
+        return productReadMapper.map(savedProduct);
+
     }
 
     @Override
     public ProductReadDto update(int id, ProductCreateAndUpdateDto dto) {
         Product old = productRepository.findById(id).orElseThrow();
+
         return Optional.ofNullable(productCreateAndUpdateMapper.map(dto, old))
-                .map(productRepository::saveAndFlush)
+                .map(product -> {
+                    imageStorageService.deleteProductFiles(product.getImages());
+
+                    List<String> savedImages = imageStorageService.storeProductFiles(dto.getImages());
+                    product.setImages(savedImages);
+                    return productRepository.saveAndFlush(product);
+                })
                 .map(productReadMapper::map)
                 .orElseThrow();
     }
@@ -60,6 +76,7 @@ public class ProductServiceImpl implements ProductService {
     public boolean delete(int id) {
         Product old = productRepository.findById(id).orElseThrow();
         productRepository.delete(old);
+        imageStorageService.deleteProductFiles(old.getImages());
         return productRepository.findById(id).isEmpty();
     }
 }

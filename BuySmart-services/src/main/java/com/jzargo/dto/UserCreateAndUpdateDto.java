@@ -36,4 +36,5 @@ public class UserCreateAndUpdateDto {
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$",
             message = "Password must contain at least one number, one uppercase letter, one lowercase letter, and one special character")
     private String password;
+
 }
