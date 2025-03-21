@@ -56,7 +56,7 @@ public class UserServiceIntegrationTest {
     }
     @Test
     void findById() {
-        UserReadDto foundUser = userService.findById(savedUser.getId());
+        UserReadDto foundUser = userService.findById(savedUser.getId()).orElseThrow();
 
         assertNotNull(foundUser);
         assertEquals(savedUser.getId(), foundUser.getId());
