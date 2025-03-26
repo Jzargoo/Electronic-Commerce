@@ -1,5 +1,7 @@
 package com.jzargo.entity;
 
+import com.jzargo.common.Role;
+import com.jzargo.common.RoleListConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,28 +29,38 @@ public class User implements BaseEntity<Long>{
     @Column(name = "profile_image")
     private String ProfileImage;
 
+    private String email;
+
 
     @Column(name = "created_on")
     @Builder.Default
     private LocalDate createdTime = LocalDate.now();
 
-    @OneToOne(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Cart cart;
+    @Builder.Default
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Cart> carts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     @Builder.Default
     private List<Product> OwnProducts = new ArrayList<>();
 
+    @Convert(converter = RoleListConverter.class)
+    @Builder.Default
+    private List<Role> roles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "buyer")
+    @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Order> orders = new ArrayList<>();
 
     private String username;
     private String password;
 
-    public void setCart(Cart cart){
-        this.cart=cart;
-        cart.setBuyer(this);
+    public List<Long> takeCartsId(){
+        return carts.stream().map(Cart::getId).toList();
+    }
+
+    public List<Long> takeOrdersId() {
+        return orders.stream().map(Order::getId).toList();
     }
 }

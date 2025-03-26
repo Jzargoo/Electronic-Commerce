@@ -1,6 +1,5 @@
 package com.jzargo.dto;
 
-import com.jzargo.common.Tags;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -11,7 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 @Builder
 @AllArgsConstructor
@@ -19,7 +17,7 @@ import java.util.List;
 @Data
 public class ProductCreateAndUpdateDto {
     @Size(min = 1, message = "Tags cannot be empty")
-    private List<Tags> tags;
+    private List<String> tags;
     @Size(min = 1, message = "At least one image should be uploaded")
     private List<MultipartFile> images;
     @NotBlank(message = "Product name cannot be empty")
@@ -28,5 +26,7 @@ public class ProductCreateAndUpdateDto {
     @NotNull(message = "Product price cannot be null")
     @Positive(message = "Price must be a positive number")
     private Float price;
+    private String category;
+    @NotNull(message = "Product creation person cannot be null")
     private Long userId;
 }

@@ -18,9 +18,10 @@ public class CartCreateMapper implements Mapper<CartDto, Cart> {
     @Override
     public Cart map(CartDto object) {
         return Cart.builder()
+                .name(object.getName())
+                .description(object.getDescription())
                 .items(object.getItems().stream()
                         .map(cartItemCreateMapper::map).toList())
-                .id(object.getId())
                 .buyer(userRepository.findById(
                         object.getBuyerId()).orElseThrow())
                 .build();

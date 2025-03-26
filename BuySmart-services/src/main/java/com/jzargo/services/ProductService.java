@@ -1,14 +1,19 @@
 package com.jzargo.services;
 
+import com.jzargo.filtration.ProductFilter;
 import com.jzargo.dto.ProductCreateAndUpdateDto;
 import com.jzargo.dto.ProductReadDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface ProductService {
     ProductReadDto findById(int id);
-    List<ProductReadDto> findAll();
+    Page<ProductReadDto> findAll(ProductFilter productFilter, Pageable pageable);
     ProductReadDto create(ProductCreateAndUpdateDto dto);
     ProductReadDto update(int id, ProductCreateAndUpdateDto dto);
     boolean delete(int id);
+
+    Page<ProductReadDto> findAllByUserId(Long userId, Pageable pageable);
 }

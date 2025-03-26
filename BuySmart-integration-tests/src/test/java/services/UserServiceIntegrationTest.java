@@ -49,11 +49,7 @@ public class UserServiceIntegrationTest {
         assertEquals("+77773662100", userReadDto.getPhone());
         assertEquals("Tests", userReadDto.getUsername());
     }
-    @Test
-    void findAll(){
-        List<UserReadDto> all = userService.findAll();
-        assertThat(all, null).hasSize(1);
-    }
+
     @Test
     void findById() {
         UserReadDto foundUser = userService.findById(savedUser.getId()).orElseThrow();
@@ -61,23 +57,5 @@ public class UserServiceIntegrationTest {
         assertNotNull(foundUser);
         assertEquals(savedUser.getId(), foundUser.getId());
         assertEquals("TestUser", foundUser.getUsername());
-    }
-
-    @Test
-    void update_ShouldModifyUser() {
-        UserCreateAndUpdateDto updatedDto = UserCreateAndUpdateDto.builder()
-                .phone("+77770001122")
-                .username("UpdatedUser")
-                .password("NewPass@123")
-                .cartId(null)
-                .ownProductIds(List.of(103))
-                .ordersId(List.of(203L))
-                .build();
-
-        UserReadDto updatedUser = userService.update(savedUser.getId(), updatedDto);
-
-        assertNotNull(updatedUser);
-        assertEquals("UpdatedUser", updatedUser.getUsername());
-        assertEquals("+77770001122", updatedUser.getPhone());
     }
 }

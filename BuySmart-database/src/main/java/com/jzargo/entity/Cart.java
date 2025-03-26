@@ -21,9 +21,11 @@ public class Cart implements BaseEntity<Long>{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+    private String description;
 
-    @OneToOne
-    @JoinColumn(name = "buyer_id", nullable = false, unique = true)
+    @ManyToOne
+    @JoinColumn(name = "buyer_id")
     private User buyer;
 
 

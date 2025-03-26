@@ -9,11 +9,9 @@ import java.util.stream.Collectors;
 
 @Component
 public class UserReadMapper implements Mapper<User, UserReadDto>{
-    private final CartReadMapper cartReadMapper;
     private final ProductReadMapper productReadMapper;
 
-    public UserReadMapper(CartReadMapper cartReadMapper, ProductReadMapper productReadMapper) {
-        this.cartReadMapper = cartReadMapper;
+    public UserReadMapper(ProductReadMapper productReadMapper) {
         this.productReadMapper = productReadMapper;
     }
 
@@ -25,6 +23,8 @@ public class UserReadMapper implements Mapper<User, UserReadDto>{
                 .createdTime(object.getCreatedTime()==null?
                         LocalDate.now():object.getCreatedTime()
                 )
+                .cartsId(object.takeCartsId())
+                .ordersId(object.takeOrdersId())
                 .ProfileImage(object.getProfileImage())
                 .username(object.getUsername())
                 .OwnProducts(

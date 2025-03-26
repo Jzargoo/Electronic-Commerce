@@ -1,5 +1,6 @@
 package com.jzargo.entity;
 
+import com.jzargo.common.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 @Table(name = "orders")
 @Builder
 @AllArgsConstructor
+@Data
 @NoArgsConstructor
 @ToString(exclude = "buyer")
 @EqualsAndHashCode(exclude = "buyer")
@@ -17,7 +19,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String address;
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
 
     @ManyToOne
     @JoinColumn(name="product_id")
@@ -30,4 +34,8 @@ public class Order {
     @JoinColumn(name="buyer_id")
     private User buyer;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    private Integer quantity;
 }

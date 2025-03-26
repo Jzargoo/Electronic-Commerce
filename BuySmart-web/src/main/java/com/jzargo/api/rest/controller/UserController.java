@@ -4,6 +4,7 @@ import com.jzargo.dto.UserCreateAndUpdateDto;
 import com.jzargo.dto.UserReadDto;
 import com.jzargo.services.UserService;
 import lombok.Data;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,16 +23,19 @@ public class UserController {
                 .orElseThrow();
     }
 
-    @PostMapping
-    UserReadDto save(@RequestBody UserCreateAndUpdateDto dto){
+    @PostMapping("/registration")
+    UserReadDto save(@Validated @RequestBody UserCreateAndUpdateDto dto){
         return userService.create(dto);
     }
+
     @PutMapping("/{id}")
     UserReadDto update(@PathVariable String id,@RequestBody  UserCreateAndUpdateDto dto){
         return userService.update(Long.valueOf(id),dto);
     }
+
     @DeleteMapping("/{id}")
     boolean delete(@PathVariable Long id){
         return userService.delete(id);
     }
+
 }

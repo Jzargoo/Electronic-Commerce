@@ -1,5 +1,7 @@
 package com.jzargo.mapper;
 
+import com.jzargo.common.Categories;
+import com.jzargo.common.Tags;
 import com.jzargo.dto.ProductCreateAndUpdateDto;
 import com.jzargo.entity.Product;
 import com.jzargo.repository.UserRepository;
@@ -25,7 +27,15 @@ public class ProductCreateAndUpdateMapper implements Mapper<ProductCreateAndUpda
                 )
                 .price(object.getPrice())
                 .description(object.getDescription())
-                .tags(object.getTags())
+                .category(
+                        Categories.valueOf(
+                        object.getCategory())
+                )
+                .tags(
+                        object.getTags().stream()
+                                .map(Tags::valueOf).toList()
+
+                )
                 .build();
     }
 }

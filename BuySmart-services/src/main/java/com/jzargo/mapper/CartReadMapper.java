@@ -18,6 +18,8 @@ public class CartReadMapper implements Mapper<Cart, CartDto> {
         return new CartDto(
                 object.getId(),
                 object.getBuyer().getId(),
+                object.getName(),
+                object.getDescription(),
                 object.getItems().stream().map(cartItemReadMapper::map)
                         .toList()
         );

@@ -3,15 +3,19 @@ package com.jzargo.services;
 import com.jzargo.dto.CartDto;
 import com.jzargo.dto.CartItemDto;
 
+import java.util.List;
+
 
 public interface CartService {
 
-    CartDto findByUserId(Long UserId);
+    List<CartDto> findAllByUserId(Long UserId);
 
-    CartDto create(Long userId);
+    List<CartDto> create(Long userId);
 
     CartDto add(CartItemDto dto);
 
 
     boolean delete (Long cartId, Integer productId);
+
+    boolean clear(Long userId);
 }

@@ -13,7 +13,8 @@ public class UserReadDto {
     private String ProfileImage;
     private String phone;
     private LocalDate createdTime;
-    private CartDto cart;
+    private List<Long> cartsId;
+    private List<Long> ordersId;
     private List<ProductReadDto> OwnProducts;
     private String username;
 }

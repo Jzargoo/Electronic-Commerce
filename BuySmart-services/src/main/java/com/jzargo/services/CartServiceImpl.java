@@ -6,7 +6,6 @@ import com.jzargo.dto.CartItemDto;
 import com.jzargo.entity.Cart;
 import com.jzargo.entity.CartItem;
 import com.jzargo.entity.Product;
-import com.jzargo.mapper.CartCreateMapper;
 import com.jzargo.mapper.CartReadMapper;
 import com.jzargo.repository.CartItemRepository;
 import com.jzargo.repository.CartRepository;
@@ -14,6 +13,7 @@ import com.jzargo.repository.ProductRepository;
 import com.jzargo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,41 +22,43 @@ public class CartServiceImpl implements CartService{
     private final CartRepository cartRepository;
     private final CartReadMapper cartReadMapper;
     private final UserRepository userRepository;
-    private final CartCreateMapper cartCreateMapper;
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
 
     public CartServiceImpl(CartRepository cartRepository, CartReadMapper cartReadMapper,
-                           UserRepository userRepository, CartCreateMapper cartCreateMapper,
-                           CartItemRepository cartItemRepository1, ProductRepository productRepository, ProductRepository productRepository1) {
+                           UserRepository userRepository,
+                           CartItemRepository cartItemRepository1, ProductRepository productRepository1) {
         this.cartRepository = cartRepository;
         this.cartReadMapper = cartReadMapper;
         this.userRepository = userRepository;
-        this.cartCreateMapper = cartCreateMapper;
         this.cartItemRepository = cartItemRepository1;
         this.productRepository = productRepository1;
     }
 
     @Override
-    public CartDto findByUserId(Long UserId) {
-        return cartRepository.findByBuyerId(UserId)
-                .map(cartReadMapper::map)
-                .orElse(
-                        create(UserId));
+    public List<CartDto> findAllByUserId(Long UserId) {
+        List<CartDto> list = cartRepository.findAllByBuyerId(UserId).stream()
+                .map(cartReadMapper::map).toList();
+        if(list.isEmpty()){
+            return create(UserId);
+        }
+        return list;
     }
 
 
 
     @Override
-    public CartDto create(Long userId) {
-        return Optional.of(cartRepository.saveAndFlush(
+    public List<CartDto> create(Long userId) {
+        return List.of(
+                Optional.of(cartRepository.saveAndFlush(
                 Cart.builder()
                         .buyer(
                                 userRepository.findById(userId).orElseThrow()
                         )
                         .build())
                 )
-                .map(cartReadMapper::map).orElseThrow();
+                .map(cartReadMapper::map).orElseThrow()
+        );
     }
 
     @Override
@@ -92,5 +94,11 @@ public class CartServiceImpl implements CartService{
                         cart.getItems().remove(cartItem));
 
         return cartItemRepository.existsById(id);
+    }
+
+    @Override
+    public boolean clear(Long userId) {
+        cartRepository.deleteByBuyerId(userId);
+        return cartRepository.findAllByBuyerId(userId).isEmpty();
     }
 }

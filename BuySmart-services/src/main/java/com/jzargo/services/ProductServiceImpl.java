@@ -1,14 +1,21 @@
 package com.jzargo.services;
 
+import com.jzargo.filtration.ProductFilter;
+import com.jzargo.common.QPredicate;
 import com.jzargo.dto.ProductCreateAndUpdateDto;
 import com.jzargo.dto.ProductReadDto;
 import com.jzargo.entity.Product;
 import com.jzargo.mapper.ProductCreateAndUpdateMapper;
 import com.jzargo.mapper.ProductReadMapper;
 import com.jzargo.repository.ProductRepository;
+
+import com.querydsl.core.types.Predicate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import static com.jzargo.entity.QProduct.product;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -33,16 +40,23 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow();
     }
 
-    @Override
-    public List<ProductReadDto> findAll() {
-        return productRepository.findAll().stream()
-                .map(productReadMapper::map)
-                .toList();
+
+    public Page<ProductReadDto> findAll(ProductFilter productFilter, Pageable pageable) {
+        Predicate predicate = QPredicate.builder()
+                .adds(productFilter.tags(), product.tags::contains)
+                .add(productFilter.minPrice(), product.price::goe)
+                .add(productFilter.maxPrice(), product.price::loe)
+                .add(productFilter.userId(), product.user.id::eq)
+                .add(productFilter.category(), product.category::eq)
+                .buildAnd();
+        return productRepository.findAll(predicate,pageable)
+                .map(productReadMapper::map);
     }
 
     @Override
     public ProductReadDto create(ProductCreateAndUpdateDto dto) {
         Product product = productCreateAndUpdateMapper.map(dto);
+
         if (product == null) {
             throw new IllegalStateException("Mapping resulted in null product");
         }
@@ -79,5 +93,10 @@ public class ProductServiceImpl implements ProductService {
         imageStorageService.deleteProductFiles(old.getImages());
         return productRepository.findById(id).isEmpty();
     }
-}
 
+    @Override
+    public Page<ProductReadDto> findAllByUserId(Long userId, Pageable pageable) {
+         return productRepository.findAllByUserId(userId,pageable)
+                 .map(productReadMapper::map);
+    }
+}

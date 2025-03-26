@@ -7,13 +7,14 @@ import com.jzargo.repository.OrderRepository;
 import com.jzargo.repository.ProductRepository;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class UserCreateAndUpdateMapper implements Mapper<UserCreateAndUpdateDto, User>{
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
 
-    public UserCreateAndUpdateMapper(OrderRepository orderRepository, CartRepository cartRepository, ProductRepository productRepository, ProductRepository productRepository1) {
+    public UserCreateAndUpdateMapper(OrderRepository orderRepository, CartRepository cartRepository,  ProductRepository productRepository1) {
         this.orderRepository = orderRepository;
         this.cartRepository = cartRepository;
         this.productRepository = productRepository1;
@@ -29,7 +30,9 @@ public class UserCreateAndUpdateMapper implements Mapper<UserCreateAndUpdateDto,
     private User getBuild(UserCreateAndUpdateDto object, User user) {
         user.setUsername(object.getUsername());
         user.setPassword(object.getPassword());
+        user.setEmail(object.getEmail());
         user.setPhone(object.getPhone());
+        user.getRoles().add(object.getRole());
         return user;
     }
 
@@ -37,13 +40,10 @@ public class UserCreateAndUpdateMapper implements Mapper<UserCreateAndUpdateDto,
     public User map(UserCreateAndUpdateDto FromObject, User RawObject) {
         var user = getBuild(FromObject,RawObject);
         user.setOrders(orderRepository.findAllById(FromObject.getOrdersId()));
-        user.setId(RawObject.getId());
-        user.setCreatedTime(RawObject.getCreatedTime());
         user.setOwnProducts(
                 productRepository.findAllById(FromObject.getOwnProductIds())
         );
-        user.setCart(cartRepository.findById(FromObject.getCartId())
-                .orElseThrow());
+        user.setCarts(cartRepository.findAllById(FromObject.getCartId()));
         return user;
     }
 }

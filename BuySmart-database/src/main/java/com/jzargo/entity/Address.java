@@ -1,16 +1,19 @@
 package com.jzargo.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "address")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String state;
-    private String city;
     private String street;
-    private String zipCode;
+    private String city;
+    private String state;
     private String country;
+    @Column(name = "zip_code")
+    private String zipCode;
 }

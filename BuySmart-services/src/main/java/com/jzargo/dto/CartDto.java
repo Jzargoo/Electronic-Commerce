@@ -14,5 +14,7 @@ public class CartDto {
     private Long id;
     @NotNull(message = "Buyer ID cannot be null")
     private  Long buyerId;
+    private String name;
+    private String description;
     private List<CartItemDto> items;
 }

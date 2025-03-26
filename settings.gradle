@@ -7,8 +7,9 @@ pluginManagement {
 }
 rootProject.name = 'BuySmart'
 include 'BuySmart-database'
-include 'BuySmart-starter'
+include 'BuySmart-starterAndConfigurer'
 include 'BuySmart-integration-tests'
 include 'BuySmart-services'
 include 'BuySmart-web'
+include 'Backend'
 

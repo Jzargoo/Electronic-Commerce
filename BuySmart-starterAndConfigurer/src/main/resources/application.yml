@@ -1,15 +1,11 @@
 spring:
   config:
     import: optional:file:.env[.properties]
-
-  liquibase:
-    user: postgres
-    password: root
-    url: jdbc:postgresql://localhost:5432/buysmart
-    driver-class-name: org.postgresql.Driver
-
   datasource:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     url: ${DB_URL}
     driver-class-name: org.postgresql.Driver
+rsa:
+  private-key: file:${KEY_PATH}/certs/private.pem
+  public-key: file:${KEY_PATH}/certs/public.pem
