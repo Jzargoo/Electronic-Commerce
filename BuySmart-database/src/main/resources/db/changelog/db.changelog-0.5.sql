@@ -1,0 +1,1 @@
+ALTER Table payment_methods ALTER COLUMN user_id TYPE bigint USING user_id::bigint;

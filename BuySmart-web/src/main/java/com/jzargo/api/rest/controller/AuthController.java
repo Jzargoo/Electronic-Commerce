@@ -13,7 +13,7 @@ public class AuthController {
         this.tokenService = tokenService;
     }
 
-    @PostMapping("/token")
+    @PostMapping("/api/token")
     public String getToken(Authentication authentication){
         return tokenService.generateToken(authentication);
     }

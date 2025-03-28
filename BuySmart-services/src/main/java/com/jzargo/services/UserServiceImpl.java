@@ -3,6 +3,7 @@ package com.jzargo.services;
 import com.jzargo.dto.UserCreateAndUpdateDto;
 import com.jzargo.dto.UserReadDto;
 import com.jzargo.entity.User;
+import com.jzargo.exceptions.DataNotFoundException;
 import com.jzargo.mapper.UserCreateAndUpdateMapper;
 import com.jzargo.mapper.UserReadMapper;
 import com.jzargo.repository.UserRepository;
@@ -95,6 +96,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findByUsername(username)
                 .map(userReadMapper::map)
                 .orElseThrow();
+    }
+
+    @Override
+    public byte[] getProfileImage(Long id) throws DataNotFoundException {
+        return imageStorageServiceImpl.getUserFile(
+                userRepository.findById(id)
+                        .map(User::getProfileImage)
+                        .orElseThrow(DataNotFoundException::new)
+        );
     }
 
     @Override

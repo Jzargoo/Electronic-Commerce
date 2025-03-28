@@ -9,3 +9,5 @@ spring:
 rsa:
   private-key: file:${KEY_PATH}/certs/private.pem
   public-key: file:${KEY_PATH}/certs/public.pem
+Stripe:
+  apikey: ${API_STRIPE}

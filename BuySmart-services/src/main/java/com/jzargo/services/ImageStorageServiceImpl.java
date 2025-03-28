@@ -1,16 +1,12 @@
 package com.jzargo.services;
 
-import jakarta.persistence.Id;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
-import javax.swing.text.html.HTML;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.*;
@@ -77,8 +73,8 @@ public class ImageStorageServiceImpl implements ImageStorageService{
 
     @SneakyThrows
     @Override
-    public Optional<byte[]> getUserFile(String fileName) {
-        return Optional.of(Files.readAllBytes(Path.of(uploadUserDir + fileName)));
+    public byte[] getUserFile(String fileName) {
+        return Files.readAllBytes(Path.of(uploadUserDir + fileName));
     }
 
     @SneakyThrows

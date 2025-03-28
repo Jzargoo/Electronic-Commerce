@@ -37,21 +37,36 @@ public class User implements BaseEntity<Long>{
     private LocalDate createdTime = LocalDate.now();
 
     @Builder.Default
+    @OneToMany(
+            mappedBy = "user", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY
+    )
+    private List<PaymentMethod> paymentMethods = new ArrayList<>();
+
+    @Builder.Default
     @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL,
             orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Cart> carts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
     @Builder.Default
+    @OneToMany(
+            mappedBy = "user", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Product> OwnProducts = new ArrayList<>();
 
     @Convert(converter = RoleListConverter.class)
     @Builder.Default
     private List<Role> roles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY,
+               cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Order> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Payment> payments = new ArrayList<>();
 
     private String username;
     private String password;

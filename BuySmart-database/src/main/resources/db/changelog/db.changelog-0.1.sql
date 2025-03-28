@@ -10,7 +10,7 @@ CREATE TABLE address (
 );
 
 CREATE TABLE orders (
-    id bigserial,
+    id bigserial PRIMARY KEY ,
     buyer_id bigint REFERENCES users,
     product_id int REFERENCES products,
     address_id bigint REFERENCES address,

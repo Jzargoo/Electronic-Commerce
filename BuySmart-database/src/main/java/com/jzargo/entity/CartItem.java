@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Table(name = "cart_items")
-public class CartItem {
+public class CartItem implements BaseEntity<CartItemId> {
     @EmbeddedId
     private CartItemId id;
 

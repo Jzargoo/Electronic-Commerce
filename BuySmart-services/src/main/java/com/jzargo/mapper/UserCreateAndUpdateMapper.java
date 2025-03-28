@@ -1,5 +1,6 @@
 package com.jzargo.mapper;
 
+import com.jzargo.common.Role;
 import com.jzargo.dto.UserCreateAndUpdateDto;
 import com.jzargo.entity.User;
 import com.jzargo.repository.CartRepository;
@@ -32,7 +33,9 @@ public class UserCreateAndUpdateMapper implements Mapper<UserCreateAndUpdateDto,
         user.setPassword(object.getPassword());
         user.setEmail(object.getEmail());
         user.setPhone(object.getPhone());
-        user.getRoles().add(object.getRole());
+        user.getRoles().add(Role.valueOf(
+                object.getRole())
+        );
         return user;
     }
 

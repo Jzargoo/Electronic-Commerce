@@ -1,5 +1,7 @@
 package com.jzargo.services;
 
+import com.jzargo.exceptions.DataNotFoundException;
+import com.jzargo.exceptions.ProductNotFoundException;
 import com.jzargo.filtration.ProductFilter;
 import com.jzargo.common.QPredicate;
 import com.jzargo.dto.ProductCreateAndUpdateDto;
@@ -92,6 +94,14 @@ public class ProductServiceImpl implements ProductService {
         productRepository.delete(old);
         imageStorageService.deleteProductFiles(old.getImages());
         return productRepository.findById(id).isEmpty();
+    }
+
+    @Override
+    public List<byte[]> loadImages(int id) throws DataNotFoundException {
+        List<String> images = productRepository.findById(id)
+                .orElseThrow(DataNotFoundException::new)
+                .getImages();
+        return imageStorageService.getProductFiles(images);
     }
 
     @Override

@@ -14,14 +14,17 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @ToString(exclude = "buyer")
 @EqualsAndHashCode(exclude = "buyer")
-public class Order {
+public class Order implements BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @OneToOne(mappedBy = "payment",cascade = CascadeType.ALL)
+    private Payment payment;
 
     @ManyToOne
     @JoinColumn(name="product_id")
@@ -30,7 +33,8 @@ public class Order {
     @Column(name = "date_dispatch")
     private LocalDate DateDispatch;
 
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="buyer_id")
     private User buyer;
 

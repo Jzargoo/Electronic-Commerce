@@ -1,5 +1,7 @@
 package com.jzargo.services;
 
+import com.jzargo.exceptions.DataNotFoundException;
+import com.jzargo.exceptions.ProductNotFoundException;
 import com.jzargo.filtration.ProductFilter;
 import com.jzargo.dto.ProductCreateAndUpdateDto;
 import com.jzargo.dto.ProductReadDto;
@@ -14,6 +16,6 @@ public interface ProductService {
     ProductReadDto create(ProductCreateAndUpdateDto dto);
     ProductReadDto update(int id, ProductCreateAndUpdateDto dto);
     boolean delete(int id);
-
+    List<byte[]> loadImages(int id) throws DataNotFoundException, DataNotFoundException;
     Page<ProductReadDto> findAllByUserId(Long userId, Pageable pageable);
 }

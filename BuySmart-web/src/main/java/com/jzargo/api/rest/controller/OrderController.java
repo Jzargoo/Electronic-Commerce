@@ -29,32 +29,40 @@ public class OrderController {
         );
     }
 
+    // Find an order by ID and userId
     @CheckUserId
     @GetMapping("{userId}/{id}")
-    public OrderReadDto findById(@PathVariable Long id, @PathVariable String userId) {
+    public OrderReadDto findById(@PathVariable Long userId, @PathVariable Long id) {
         return orderService.findById(id);
     }
 
+    // Create a new order for the user
     @CheckUserId
     @PostMapping("/{userId}")
-    public ResponseEntity<Void> create(@PathVariable Long userId, OrderCreateAndUpdateDto dto){
+    public ResponseEntity<Void> create(@PathVariable Long userId, @RequestBody OrderCreateAndUpdateDto dto) {
         orderService.create(dto);
-        return redirectToUserOrder(userId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    // Delete an order by ID
     @CheckUserId
     @DeleteMapping("/{userId}/{id}")
-    public void delete(@PathVariable Long id, @PathVariable Long userId){
-        boolean delete = orderService.delete(id);
-        if (!delete) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Void> delete(@PathVariable Long userId, @PathVariable Long id) {
+        boolean deleted = orderService.delete(id);
+        if (!deleted) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found for deletion");
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-    private static ResponseEntity<Void> redirectToUserOrder(Long UserId) {
-        String redirectUrl = "/api/products/users/" + UserId;
+
+    // Helper method for redirecting to the user's orders page
+    private static ResponseEntity<Void> redirectToUserOrder(Long userId) {
+        String redirectUrl = "/api/orders/users/" + userId;
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", redirectUrl);
 
-        // HTTP 302 is for a temporary redirect
-        return ResponseEntity.status(302)
+        return ResponseEntity.status(HttpStatus.FOUND)
                 .headers(headers)
                 .build();
     }

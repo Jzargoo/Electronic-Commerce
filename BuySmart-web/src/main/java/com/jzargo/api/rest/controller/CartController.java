@@ -4,6 +4,9 @@ import com.jzargo.api.rest.checker.CheckUserId;
 import com.jzargo.dto.CartDto;
 import com.jzargo.dto.CartItemDto;
 import com.jzargo.services.CartService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,25 +20,45 @@ public class CartController {
     public CartController(CartService cartService) {
         this.cartService = cartService;
     }
+
+    // Get all cart items for a user by userId
     @CheckUserId
     @GetMapping("/{userId}")
-    public List<CartDto> findByAllId(@PathVariable Long userId){
-        return cartService.findAllByUserId(userId);
+    public ResponseEntity<List<CartDto>> findByAllId(@PathVariable Long userId) {
+        List<CartDto> cartItems = cartService.findAllByUserId(userId);
+        if (cartItems.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // No items found for this user
+        }
+        return ResponseEntity.ok(cartItems);
     }
 
+    // Add an item to the cart for a user
     @CheckUserId
     @PutMapping("/{userId}")
-    public CartDto add(@RequestBody CartItemDto cartItemDto, @PathVariable String userId){
-        return cartService.add(cartItemDto);
+    public ResponseEntity<CartDto> add(@RequestBody @Validated CartItemDto cartItemDto, @PathVariable Long userId) {
+        CartDto updatedCartItem = cartService.add(cartItemDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updatedCartItem);
     }
+
+    // Delete a specific cart item for a user
     @CheckUserId
     @DeleteMapping("/{productId}/{cartItemId}")
-    public boolean delete(@PathVariable Integer productId, @PathVariable Long cartItemId) {
-        return cartService.delete(cartItemId, productId);
+    public ResponseEntity<Void> delete(@PathVariable Integer productId, @PathVariable Long cartItemId) {
+        boolean deleted = cartService.delete(cartItemId, productId);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    // Clear all items from the user's cart
     @CheckUserId
     @DeleteMapping("/{userId}")
-    public boolean clear(@PathVariable Long userId){
-        return cartService.clear(userId);
+    public ResponseEntity<Void> clear(@PathVariable Long userId) {
+        boolean cleared = cartService.clear(userId);
+        if (cleared) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

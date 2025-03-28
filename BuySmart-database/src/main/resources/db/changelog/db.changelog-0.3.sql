@@ -1,4 +1,3 @@
-ALTER Table carts RENAME COLUMN created_at TO updated_at;
 
 ALTER Table carts ADD COLUMN  name VARCHAR(255) NOT NULL;
 

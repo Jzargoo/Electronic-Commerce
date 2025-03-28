@@ -39,5 +39,5 @@ public class UserCreateAndUpdateDto {
     private String password;
     @Email(message = "Invalid email format")
     private String Email;
-    private Role role;
+    private String role;
 }

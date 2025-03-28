@@ -30,7 +30,7 @@ CREATE TABLE carts
 (
     id         BIGSERIAL PRIMARY KEY,
     buyer_id   BIGINT NOT NULL UNIQUE REFERENCES users (id) ON DELETE CASCADE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_on Date DEFAULT current_date
 );
 
 CREATE TABLE cart_items
