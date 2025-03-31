@@ -1,14 +1,14 @@
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    implementation project(':BuySmart-database')
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.security:spring-security-oauth2-jose'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
+    implementation project(':BuySmart-database')
+
+    implementation 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly "com.stripe:stripe-java:28.4.0"
 }
 
 test {

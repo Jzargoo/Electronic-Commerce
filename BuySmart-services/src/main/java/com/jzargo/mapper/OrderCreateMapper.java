@@ -6,6 +6,9 @@ import com.jzargo.repository.ProductRepository;
 import com.jzargo.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Component
 public class OrderCreateMapper implements Mapper<OrderCreateAndUpdateDto, Order> {
     private final ProductRepository productRepository;
@@ -21,7 +24,7 @@ public class OrderCreateMapper implements Mapper<OrderCreateAndUpdateDto, Order>
     @Override
     public Order map(OrderCreateAndUpdateDto orderCreateDto) {
         return Order.builder()
-                .DateDispatch(orderCreateDto.getDateDispatch())
+                .DateDispatch(LocalDate.now())
                 .product(
                         productRepository.findById(orderCreateDto.getProductId())
                                 .orElseThrow()

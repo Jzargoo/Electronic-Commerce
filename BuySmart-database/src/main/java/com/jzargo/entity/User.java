@@ -4,9 +4,12 @@ import com.jzargo.common.Role;
 import com.jzargo.common.RoleListConverter;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -17,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class User implements BaseEntity<Long>{
+public class User implements BaseEntity<Long>, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +34,8 @@ public class User implements BaseEntity<Long>{
 
     private String email;
 
+    @Column(name = "stripe_customer_id")
+    private String stripeCustomerId;
 
     @Column(name = "created_on")
     @Builder.Default
@@ -47,6 +52,7 @@ public class User implements BaseEntity<Long>{
     @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL,
             orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Cart> carts = new ArrayList<>();
+
 
     @Builder.Default
     @OneToMany(
@@ -73,6 +79,30 @@ public class User implements BaseEntity<Long>{
 
     public List<Long> takeCartsId(){
         return carts.stream().map(Cart::getId).toList();
+    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 
     public List<Long> takeOrdersId() {

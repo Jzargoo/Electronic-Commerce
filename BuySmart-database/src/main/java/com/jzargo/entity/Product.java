@@ -46,8 +46,10 @@ public class Product implements BaseEntity<Integer>{
     private String description;
     private Float price;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(name="category")
-    private Categories category;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @
 
 }

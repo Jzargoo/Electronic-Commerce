@@ -23,7 +23,7 @@ public class Order implements BaseEntity<Long>{
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToOne(mappedBy = "payment",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order",cascade = CascadeType.ALL)
     private Payment payment;
 
     @ManyToOne

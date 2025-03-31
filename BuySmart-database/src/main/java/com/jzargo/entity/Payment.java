@@ -2,12 +2,18 @@ package com.jzargo.entity;
 
 import com.jzargo.common.PaymentStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "payments")
 public class Payment implements BaseEntity<Long>{
     @Id
@@ -33,10 +39,8 @@ public class Payment implements BaseEntity<Long>{
 
     @Column(name="stripe_payment_id")
     private String StripePaymentId;
-    @Column(name = "stripe_customer_id")
-    private String StripeCustomerId;
 
-    private Float amount;
+    private Long amount;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
@@ -44,4 +48,11 @@ public class Payment implements BaseEntity<Long>{
 
     @Column(columnDefinition = "jsonb")
     private String metadata;
+
+    public void setUser(User user) {
+        this.user = user;
+        if (user != null) {
+            user.getPayments().add(this);
+        }
+    }
 }

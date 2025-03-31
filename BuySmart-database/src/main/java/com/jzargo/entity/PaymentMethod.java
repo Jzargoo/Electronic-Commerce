@@ -29,7 +29,7 @@ public class PaymentMethod implements BaseEntity<Long>{
 
     @OneToMany(mappedBy = "paymentMethod", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
-    private List<Order> orders = new ArrayList<>();
+    private List<Payment> payments = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

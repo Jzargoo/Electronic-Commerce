@@ -7,6 +7,7 @@ import com.jzargo.exceptions.DataNotFoundException;
 import com.jzargo.mapper.UserCreateAndUpdateMapper;
 import com.jzargo.mapper.UserReadMapper;
 import com.jzargo.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
@@ -109,11 +111,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .map(User -> new org.springframework.security.core.userdetails.User(
-                        User.getUsername(),
-                        User.getPassword(),
-                        User.getRoles()))
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        System.out.println("Granted Authorities: " + user.getAuthorities());
+        return user;
     }
 }

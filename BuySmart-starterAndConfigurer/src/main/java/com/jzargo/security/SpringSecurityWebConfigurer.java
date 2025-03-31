@@ -40,9 +40,9 @@ public class SpringSecurityWebConfigurer {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/users/{userId:[0-9]+}","api/users/registration", "/login",
+                        .requestMatchers("/api/users/{userId:[0-9]+}","/api/users/registration", "/login",
                                 "/api/products/view/**").permitAll()
-                        .requestMatchers("/api/products/edit/**").hasRole(SELLER.getAuthority())
+                        .requestMatchers("/api/products/edit/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
@@ -58,7 +58,7 @@ public class SpringSecurityWebConfigurer {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("*");  // Or specify your frontend origin
+        config.addAllowedOrigin("*");
         config.addAllowedMethod("POST");
         config.addAllowedHeader("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

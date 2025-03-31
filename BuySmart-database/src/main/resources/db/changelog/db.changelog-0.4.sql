@@ -86,13 +86,13 @@ CREATE TABLE categories(
     name        VARCHAR(32) UNIQUE NOT NULL
 );
 
-CREATE TABLE discounts
+CREATE TABLE coupons
 (
     id              SERIAL PRIMARY KEY,
     code            TEXT UNIQUE                                        NOT NULL,
     discount_type   TEXT CHECK (discount_type IN ('FIXED', 'PERCENT')) NOT NULL,
     category_id     INT                                                NULL REFERENCES categories (id),
-    value           NUMERIC                                            NOT NULL,
+    discount        NUMERIC                                            NOT NULL,
     min_order_price NUMERIC DEFAULT 0
 );
 

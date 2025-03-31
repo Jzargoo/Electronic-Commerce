@@ -1,7 +1,6 @@
 package com.jzargo.services;
 
 import com.jzargo.exceptions.DataNotFoundException;
-import com.jzargo.exceptions.ProductNotFoundException;
 import com.jzargo.filtration.ProductFilter;
 import com.jzargo.common.QPredicate;
 import com.jzargo.dto.ProductCreateAndUpdateDto;
