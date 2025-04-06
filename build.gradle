@@ -1,0 +1,20 @@
+plugins {
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+}
+
+
+
+subprojects {
+    apply plugin: "java-library"
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    repositories {
+        mavenCentral()
+    }
+}
+allprojects {
+    group = 'com.jzargo'
+    version = '1.0-SNAPSHOT'
+}

@@ -1,0 +1,16 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
+    driver-class-name: org.postgresql.Driver
+rsa:
+  private-key: file:${KEY_PATH}/certs/private.pem
+  public-key: file:${KEY_PATH}/certs/public.pem
+Stripe:
+  api:
+    key: ${API_STRIPE}
+ngrok:
+  url: ${NGROK_URL}

@@ -1,0 +1,12 @@
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    implementation 'org.projectlombok:lombok'
+    compileOnly "com.stripe:stripe-java:28.4.0"
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation project(":BuySmart-services")
+    implementation project(":BuySmart-database")
+}
