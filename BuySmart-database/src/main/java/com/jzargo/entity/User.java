@@ -34,6 +34,9 @@ public class User implements BaseEntity<Long>, UserDetails {
 
     private String email;
 
+    @OneToOne(mappedBy = "user")
+    private UserSettings settings;
+
     @Column(name = "stripe_customer_id")
     private String stripeCustomerId;
 
@@ -41,7 +44,14 @@ public class User implements BaseEntity<Long>, UserDetails {
     @Builder.Default
     private LocalDate createdTime = LocalDate.now();
 
-    @OneToMany
+    @OneToMany(
+            mappedBy = "user", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY
+    )
+    @Builder.Default
+    private List<Review> reviews = new ArrayList<>();
+
+    @ManyToMany
     @Builder.Default
     private List<Coupon> coupons = new ArrayList<>();
 

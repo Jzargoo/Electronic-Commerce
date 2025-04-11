@@ -28,6 +28,13 @@ public class Product implements BaseEntity<Integer>{
     @Column(name = "created_at")
     private LocalDateTime created;
 
+    @OneToMany(
+            mappedBy = "product", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY
+    )
+    @Builder.Default
+    private List<Review> reviews = new ArrayList<>();
+
     @ElementCollection
     @Builder.Default
     @CollectionTable(name = "Product_images",joinColumns = @JoinColumn(name = "product_id"))

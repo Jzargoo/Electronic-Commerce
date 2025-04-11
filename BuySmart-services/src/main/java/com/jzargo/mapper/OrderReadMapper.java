@@ -21,6 +21,5 @@ public class OrderReadMapper implements Mapper<Order, OrderReadDto> {
                 (order.getProduct().getPrice() * order.getQuantity()),
                 order.getDateDispatch(),
                 addressReadMapper.map(order.getAddress())
-        );
-    }
+        );    }
 }

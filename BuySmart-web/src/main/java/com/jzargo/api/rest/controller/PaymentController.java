@@ -6,6 +6,7 @@ import com.jzargo.dto.PaymentReadDto;
 import com.jzargo.dto.UserReadDto;
 import com.jzargo.entity.User;
 import com.jzargo.services.PaymentService;
+import com.jzargo.services.PaymentServiceImpl;
 import com.jzargo.services.UserService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final UserService userService;
 
-    public PaymentController(PaymentService paymentService, UserService userService) {
+    public PaymentController(PaymentServiceImpl paymentService, UserService userService) {
         this.paymentService = paymentService;
         this.userService = userService;
     }
@@ -51,7 +52,7 @@ public class PaymentController {
                 paymentService.findById(id)
         );
     }
-//
+
 //    @PostMapping
 //    public ResponseEntity<PaymentReadDto> createPurchase(@RequestBody PaymentCreateAndUpdateDto request) {
 //    }

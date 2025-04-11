@@ -2,9 +2,14 @@ package com.jzargo.services;
 
 import com.jzargo.dto.OrderCreateAndUpdateDto;
 import com.jzargo.dto.OrderReadDto;
+import com.jzargo.entity.Order;
+import com.jzargo.entity.Product;
+import com.jzargo.events.OrderCreatedEvent;
 import com.jzargo.mapper.OrderCreateMapper;
 import com.jzargo.mapper.OrderReadMapper;
 import com.jzargo.repository.OrderRepository;
+import com.jzargo.repository.ProductRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,11 +21,19 @@ public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final OrderReadMapper orderReadMapper;
     private final OrderCreateMapper orderCreateMapper;
+    private final ApplicationEventPublisher applicationEventPublisher;
+    private final ProductRepository productRepository;
 
-    public OrderServiceImpl(OrderRepository orderRepository, OrderReadMapper orderReadMapper, OrderCreateMapper orderCreateMapper) {
+    public OrderServiceImpl(OrderRepository orderRepository, OrderReadMapper orderReadMapper,
+                            OrderCreateMapper orderCreateMapper,
+                            ApplicationEventPublisher applicationEventPublisher,
+                            ProductRepository productRepository) {
+
         this.orderRepository = orderRepository;
         this.orderReadMapper = orderReadMapper;
         this.orderCreateMapper = orderCreateMapper;
+        this.applicationEventPublisher = applicationEventPublisher;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -38,11 +51,18 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public OrderReadDto create(OrderCreateAndUpdateDto orderCreateDto) {
-        return Optional.ofNullable(orderCreateDto)
-                .map(orderCreateMapper::map)
-                .map(orderRepository::saveAndFlush)
-                .map(orderReadMapper::map)
-                .orElseThrow();
+        Product product = productRepository.findById(orderCreateDto.getProductId()).orElseThrow();
+        Order map = orderCreateMapper.map(orderCreateDto);
+        map = orderRepository.saveAndFlush(map);
+        applicationEventPublisher.publishEvent(
+                new OrderCreatedEvent(
+                        this,
+                        orderCreateDto.getUserId(),
+                        map.getId(),
+                        product.getPrice() * orderCreateDto.getQuantity()
+                )
+        );
+        return orderReadMapper.map(map);
     }
     @Override
     public boolean delete(Long id) {

@@ -1,9 +1,15 @@
 package com.jzargo.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jzargo.common.PaymentStatus;
+import com.jzargo.dto.OrderReadDto;
 import com.jzargo.dto.PaymentCreateAndUpdateDto;
 import com.jzargo.dto.PaymentReadDto;
 import com.jzargo.entity.Order;
+import com.jzargo.entity.Payment;
 import com.jzargo.exceptions.DataNotFoundException;
+import com.jzargo.exceptions.MetadataException;
 import com.jzargo.mapper.PaymentCreateAndUpdateMapper;
 import com.jzargo.mapper.PaymentReadMapper;
 import com.jzargo.repository.OrderRepository;
@@ -11,6 +17,7 @@ import com.jzargo.repository.PaymentRepository;
 import com.jzargo.repository.UserRepository;
 import com.stripe.Stripe;
 import com.stripe.model.Customer;
+import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
@@ -18,9 +25,12 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class PaymentServiceImpl implements PaymentService{
     @Value("${stripe.api.key}")
@@ -30,8 +40,6 @@ public class PaymentServiceImpl implements PaymentService{
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final PaymentCreateAndUpdateMapper paymentCreateAndUpdateMapper;
-    @Value("${ngrok.url}")
-    private String PublicUrl;
 
     public PaymentServiceImpl(PaymentReadMapper paymentReadMapper, PaymentRepository paymentRepository, UserRepository userRepository, OrderRepository orderRepository, PaymentCreateAndUpdateMapper paymentCreateAndUpdateMapper){
         this.paymentReadMapper = paymentReadMapper;
@@ -78,8 +86,8 @@ public class PaymentServiceImpl implements PaymentService{
                 )
                 .setCustomer(user.getStripeCustomerId())
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl(PublicUrl+"/success/"+dto.getOrderId())
-                .setCancelUrl(PublicUrl+"/cancel/"+dto.getOrderId())
+                .setSuccessUrl("http://localhost:3000/order/success/" + dto.getOrderId())
+                .setCancelUrl("http://localhost:3000/order/cancel/" + dto.getOrderId())
                 .addLineItem(SessionCreateParams.LineItem.builder()
                         .setQuantity(
                                 (long) orderRepository.findById(dto.getOrderId())
@@ -107,4 +115,31 @@ public class PaymentServiceImpl implements PaymentService{
         paymentRepository.saveAndFlush(payment);
         return session.getUrl();
     }
+
+    @Override
+    public PaymentReadDto createPayment(PaymentIntent intent) {
+
+        Payment payment = paymentRepository.findByStripePaymentId(intent.getId()).orElseThrow();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String metadataJson = null;
+
+        try {
+            metadataJson = objectMapper.writeValueAsString(intent.getMetadata());
+        } catch (JsonProcessingException e) {
+            throw new MetadataException(e.getMessage());
+        }
+
+        payment.setMetadata(metadataJson);
+
+        try {
+            payment.setStatus(PaymentStatus.valueOf(intent.getStatus().toUpperCase()));
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException("Unknown payment status from Stripe: " + intent.getStatus());
+        }
+
+        return Optional.of(
+                paymentRepository.saveAndFlush(payment)
+        ).map(paymentReadMapper::map).orElseThrow();
+    }
+
 }

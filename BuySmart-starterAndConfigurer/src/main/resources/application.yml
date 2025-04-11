@@ -12,5 +12,5 @@ rsa:
 Stripe:
   api:
     key: ${API_STRIPE}
-ngrok:
-  url: ${NGROK_URL}
+  webhook:
+    secret: ${WEBHOOK_SECRET}
