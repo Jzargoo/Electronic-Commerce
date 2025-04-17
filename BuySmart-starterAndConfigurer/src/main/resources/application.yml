@@ -14,3 +14,9 @@ Stripe:
     key: ${API_STRIPE}
   webhook:
     secret: ${WEBHOOK_SECRET}
+Email:
+  api:
+    url: https://api.elasticemail.com/v4/email/send
+    key: ${EMAIL_API}
+  sender:
+    url: ${WORKING_EMAIL_URL}

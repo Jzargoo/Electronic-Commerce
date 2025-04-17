@@ -110,6 +110,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public boolean updatePassword(String newPassword, String email) {
+        userRepository.findByEmail(email)
+                .map(user-> {
+                        user.setPassword(
+                                    passwordEncoder.encode(newPassword));
+                        return user;
+                        }
+                ).map(userRepository::saveAndFlush);
+        return userRepository.existsByPassword(newPassword);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));

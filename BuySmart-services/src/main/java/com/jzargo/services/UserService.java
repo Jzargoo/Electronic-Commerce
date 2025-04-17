@@ -15,4 +15,6 @@ public interface UserService {
     UserReadDto findByUsername(String username);
 
     byte[] getProfileImage(Long id) throws DataNotFoundException;
+
+    boolean updatePassword(String newPassword, String email);
 }
