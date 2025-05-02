@@ -1,0 +1,13 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        maven { url 'https://repo.spring.io/release' }
+    }
+}
+rootProject.name = 'BuySmart-backend'
+include 'BuySmart-database'
+include 'BuySmart-starterAndConfigurer'
+include 'BuySmart-integration-tests'
+include 'BuySmart-services'
+include 'BuySmart-web'

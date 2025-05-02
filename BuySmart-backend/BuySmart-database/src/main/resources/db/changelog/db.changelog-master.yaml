@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/db.changelog-init.sql
+  - include:
+      file: db/changelog/db.changelog-0.1.sql
+  - include:
+      file: db/changelog/db.changelog-0.2.sql
+  - include:
+      file: db/changelog/db.changelog-0.3.sql
+  - include:
+      file: db/changelog/db.changelog-0.4.sql
+  - include:
+      file: db/changelog/db.changelog-0.5.sql
+  - include:
+      file: db/changelog/db.changelog-0.6.sql
+  - include:
+      file: db/changelog/db.changelog-0.7.sql

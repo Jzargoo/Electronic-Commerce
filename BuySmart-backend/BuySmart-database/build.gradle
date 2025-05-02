@@ -1,0 +1,57 @@
+plugins {
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+}
+
+dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.liquibase:liquibase-core'
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'com.jzargo:shared:1.0'
+
+    annotationProcessor"jakarta.persistence:jakarta.persistence-api:3.0.0"
+    api 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+
+    implementation 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+jar {
+    enabled = true
+}
+
+bootJar {
+    enabled = false
+}
+
+querydsl {
+    jpa = true
+    library = 'com.querydsl:querydsl-apt:5.0.0:jakarta'
+    querydslSourcesDir = "$buildDir/generated/sources/annotationProcessor/java/main"
+}
+
+sourceSets {
+    main.java.srcDirs += "$buildDir/generated/sources/annotationProcessor/java/main"
+}
+
+initQuerydslSourcesDir.dependsOn clean
+
+
+configurations {
+    querydsl.extendsFrom implementation, runtimeOnly, compileOnly
+
+}
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.annotationProcessor
+}
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file("$buildDir/generated/sources/querydsl")
+}
+test {
+    useJUnitPlatform()
+}
