@@ -1,0 +1,27 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
+    driver-class-name: org.postgresql.Driver
+rsa:
+  private-key: file:${KEY_PATH}/certs/private.pem
+  public-key: file:${KEY_PATH}/certs/public.pem
+Stripe:
+  api:
+    key: ${API_STRIPE}
+  webhook:
+    secret: ${WEBHOOK_SECRET}
+Email:
+  api:
+    url: https://api.elasticemail.com/v4/email/send
+    key: ${EMAIL_API}
+  sender:
+    url: ${WORKING_EMAIL_URL}
+Files:
+  upload:
+    user: ${UPLOAD_DIR_USERS}
+    product: ${UPLOAD_DIR_PRODUCTS}
+    review: ${UPLOAD_DIR_REVIEWS}

@@ -1,0 +1,32 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = 'com.jzargo'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+
+}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}
+dependencies {
+    compileOnly("org.projectlombok:lombok:1.18.38")
+    annotationProcessor("org.projectlombok:lombok:1.18.38")
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+
+}
+
+test {
+    useJUnitPlatform()
+}

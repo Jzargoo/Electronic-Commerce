@@ -1,0 +1,27 @@
+plugins {
+    id 'base'
+}
+dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly "com.stripe:stripe-java:28.4.0"
+
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    implementation project(':BuySmart-services')
+    implementation project(':BuySmart-database')
+    implementation project(':BuySmart-web')
+
+}
+
+springBoot {
+    mainClass = 'com.jzargo.Application'
+}
+test {
+    useJUnitPlatform()
+}
