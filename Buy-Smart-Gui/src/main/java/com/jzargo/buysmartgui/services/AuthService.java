@@ -1,6 +1,7 @@
 package com.jzargo.buysmartgui.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jzargo.buysmartgui.util.JWTStorage;
 import com.jzargo.shared.model.LoginCreateDto;
 import com.jzargo.shared.model.UserCreateAndUpdateDto;
 import lombok.SneakyThrows;
@@ -34,7 +35,13 @@ public class AuthService {
         switch (authenticate.statusCode()){
             case 409 -> System.out.println("user already exist");
             case 500 -> System.out.println("Bad request. Try again later");
-            case 201 -> System.out.println("User created");
+            case 201 -> {
+                JWTStorage.saveToken(authenticate.body());
+                System.out.println(
+                    JWTStorage.loadToken()
+                );
+            }
+            default -> System.out.println("authenticate");
         }
     }
 

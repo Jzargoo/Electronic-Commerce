@@ -44,8 +44,8 @@ public class SpringSecurityWebConfigurer {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/users/{userId:[0-9]+}","/api/users/registration",
-                                "api/auth/login",
+                        .requestMatchers("/api/users/{userId:[0-9]+}",
+                                "/api/auth/**",
                                 "/api/products/view/**").permitAll()
                         .requestMatchers("/api/products/edit/**").permitAll()
                         .anyRequest().authenticated()

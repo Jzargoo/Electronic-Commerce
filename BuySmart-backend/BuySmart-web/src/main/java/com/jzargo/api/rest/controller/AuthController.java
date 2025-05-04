@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -22,7 +23,6 @@ public class AuthController {
     private final EmailService emailService;
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
-
     public AuthController(TokenService tokenService, EmailService emailService, UserService userService, AuthenticationManager authenticationManager) {
         this.tokenService = tokenService;
         this.emailService = emailService;
@@ -104,6 +104,7 @@ public class AuthController {
         } catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed");
         }
     }

@@ -1,14 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.jzargo.buysmartgui.ui.HomePageController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzarg">
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="66.0" prefWidth="600.0" style="-fx-background-color: gray;">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="43.0" prefWidth="147.0">
+                     <children>
+                        <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
+                        <Hyperlink prefHeight="32.0" prefWidth="95.0" styleClass="header" stylesheets="@main.css" text="buy-smart">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Hyperlink>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </HBox.margin>
+                  </HBox>
+                  <TextField fx:id="product" onAction="#ProductListLoad" prefHeight="26.0" prefWidth="245.0" promptText="Search for products" style="-fx-background-color: #181818;" styleClass="search">
+                     <HBox.margin>
+                        <Insets left="50.0" right="50.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="53.0" prefWidth="147.0">
+                     <children>
+                        <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets right="2.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <ImageView  fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="5.0" right="3.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="3.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="110.0" prefWidth="600.0" style="-fx-background-color: #181818;">
+               <children>
+                  <ImageView fitHeight="105.0" fitWidth="394.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets left="45.0" right="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="134.0" style="-fx-background-color: grey;">
+                     <HBox.margin>
+                        <Insets bottom="6.0" top="12.0" />
+                     </HBox.margin>
+                     <children>
+                        <Label id="categoryLabel" prefHeight="18.0" prefWidth="168.0" text="Categories" />
+                        <Hyperlink prefHeight="24.0" fx:id="category1" styleClass="products" prefWidth="105.0" text="Text holder" />
+                        <Hyperlink prefHeight="24.0" fx:id="category2" prefWidth="105.0" styleClass="categories" text="Text holder" />
+                        <Hyperlink prefWidth="105.0" fx:id="category3" styleClass="products" text="Text holder" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="224.0" prefWidth="600.0" style="-fx-background-color: #181818;" />
+            <HBox prefHeight="44.0" prefWidth="600.0" style="-fx-background-color: grey;">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="595.0">
+                     <children>
+                        <Hyperlink text="Customer service">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="8.0" />
+                           </font>
+                        </Hyperlink>
+                        <Hyperlink text="Privacy Policy">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="8.0" />
+                           </font>
+                        </Hyperlink>
+                        <Hyperlink text="Terms of Use">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="8.0" />
+                           </font>
+                        </Hyperlink>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="31.0" prefWidth="539.0">
+                     <children>
+                        <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="5.0" right="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

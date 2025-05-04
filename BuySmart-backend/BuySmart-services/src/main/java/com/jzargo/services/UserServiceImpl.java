@@ -51,7 +51,6 @@ public class UserServiceImpl implements UserService{
         map.setPassword(
                 passwordEncoder.encode(dto.getPassword())
         );
-
         if (userRepository
                 .existsByUsernameOrPhoneOrEmail(
                         map.getUsername(), dto.getPhone(), dto.getEmail())){
