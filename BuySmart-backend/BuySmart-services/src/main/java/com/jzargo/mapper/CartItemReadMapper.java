@@ -1,7 +1,7 @@
 package com.jzargo.mapper;
 
-import com.jzargo.shared.model.CartItemDto;
 import com.jzargo.entity.CartItem;
+import com.jzargo.shared.model.CartItemDto;
 import org.springframework.stereotype.Component;
 
 @Component

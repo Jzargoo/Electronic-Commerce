@@ -1,7 +1,10 @@
 package com.jzargo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
@@ -22,7 +25,6 @@ public class Coupon extends Discount {
     @ManyToMany
     @JoinTable(
             name = "users",
-            joinColumns = @JoinColumn(name = "coupon_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+            joinColumns = @JoinColumn(name = "coupon_id"))
     private List<User> user;
 }

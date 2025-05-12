@@ -1,7 +1,7 @@
 package com.jzargo.mapper;
 
-import com.jzargo.shared.model.ReviewReadDto;
 import com.jzargo.entity.Review;
+import com.jzargo.shared.model.ReviewReadDto;
 import org.springframework.stereotype.Component;
 
 @Component

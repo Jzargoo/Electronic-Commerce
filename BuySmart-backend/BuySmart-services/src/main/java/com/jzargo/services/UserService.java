@@ -1,9 +1,9 @@
 package com.jzargo.services;
 
+import com.jzargo.exceptions.DataNotFoundException;
 import com.jzargo.exceptions.UserAlreadyExistsException;
 import com.jzargo.shared.model.UserCreateAndUpdateDto;
 import com.jzargo.shared.model.UserReadDto;
-import com.jzargo.exceptions.DataNotFoundException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Optional;

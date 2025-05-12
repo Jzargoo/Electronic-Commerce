@@ -1,10 +1,10 @@
 package com.jzargo.mapper;
 
-import com.jzargo.shared.model.CartItemDto;
-import com.jzargo.entity.CartItem;
 import com.jzargo.common.CartItemId;
+import com.jzargo.entity.CartItem;
 import com.jzargo.repository.CartRepository;
 import com.jzargo.repository.ProductRepository;
+import com.jzargo.shared.model.CartItemDto;
 import org.springframework.stereotype.Component;
 
 @Component

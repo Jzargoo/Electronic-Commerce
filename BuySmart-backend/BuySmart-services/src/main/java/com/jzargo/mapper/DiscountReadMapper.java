@@ -1,13 +1,13 @@
 package com.jzargo.mapper;
 
-import com.jzargo.shared.model.CouponDto;
-import com.jzargo.shared.model.DiscountDto;
-import com.jzargo.shared.model.ProductDiscountDto;
-import com.jzargo.shared.model.SeasonDiscountDto;
 import com.jzargo.entity.Coupon;
 import com.jzargo.entity.Discount;
 import com.jzargo.entity.ProductDiscount;
 import com.jzargo.entity.SeasonDiscount;
+import com.jzargo.shared.model.CouponDto;
+import com.jzargo.shared.model.DiscountDto;
+import com.jzargo.shared.model.ProductDiscountDto;
+import com.jzargo.shared.model.SeasonDiscountDto;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,13 +1,12 @@
 package com.jzargo.api.rest.controller;
 
-import com.jzargo.shared.model.UserCreateAndUpdateDto;
-import com.jzargo.shared.model.UserReadDto;
 import com.jzargo.exceptions.DataNotFoundException;
 import com.jzargo.services.UserService;
+import com.jzargo.shared.model.UserCreateAndUpdateDto;
+import com.jzargo.shared.model.UserReadDto;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;

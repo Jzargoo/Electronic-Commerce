@@ -1,9 +1,9 @@
 package com.jzargo.events;
 
-import com.jzargo.shared.model.PaymentCreateAndUpdateDto;
 import com.jzargo.exceptions.DataNotFoundException;
 import com.jzargo.repository.UserSettingsRepository;
 import com.jzargo.services.PaymentService;
+import com.jzargo.shared.model.PaymentCreateAndUpdateDto;
 import lombok.SneakyThrows;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.jzargo.mapper;
 
-import com.jzargo.shared.model.AddressDto;
 import com.jzargo.entity.Address;
+import com.jzargo.shared.model.AddressDto;
 import org.springframework.stereotype.Component;
 
 @Component

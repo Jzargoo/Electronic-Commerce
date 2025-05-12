@@ -1,7 +1,7 @@
 package com.jzargo.mapper;
 
-import com.jzargo.shared.model.UserReadDto;
 import com.jzargo.entity.User;
+import com.jzargo.shared.model.UserReadDto;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

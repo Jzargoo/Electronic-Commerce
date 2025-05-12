@@ -1,7 +1,7 @@
 package com.jzargo.mapper;
 
-import com.jzargo.shared.model.OrderReadDto;
 import com.jzargo.entity.Order;
+import com.jzargo.shared.model.OrderReadDto;
 import org.springframework.stereotype.Component;
 
 @Component

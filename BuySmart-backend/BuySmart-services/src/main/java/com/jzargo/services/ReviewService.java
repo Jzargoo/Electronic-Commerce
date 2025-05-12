@@ -1,9 +1,9 @@
 package com.jzargo.services;
 
 
+import com.jzargo.filtration.ReviewFilter;
 import com.jzargo.shared.model.ReviewCreateAndUpdateDto;
 import com.jzargo.shared.model.ReviewReadDto;
-import com.jzargo.filtration.ReviewFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

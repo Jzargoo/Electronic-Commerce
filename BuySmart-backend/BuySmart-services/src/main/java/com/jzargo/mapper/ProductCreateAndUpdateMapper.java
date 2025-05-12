@@ -1,11 +1,11 @@
 package com.jzargo.mapper;
 
-import com.jzargo.shared.common.Categories;
-import com.jzargo.shared.common.Tags;
-import com.jzargo.shared.model.ProductCreateAndUpdateDto;
 import com.jzargo.entity.Product;
 import com.jzargo.repository.CategoryRepository;
 import com.jzargo.repository.UserRepository;
+import com.jzargo.shared.common.Categories;
+import com.jzargo.shared.common.Tags;
+import com.jzargo.shared.model.ProductCreateAndUpdateDto;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

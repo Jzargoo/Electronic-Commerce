@@ -1,14 +1,14 @@
 package com.jzargo.mapper;
 
-import com.jzargo.shared.model.CouponDto;
-import com.jzargo.shared.model.ProductDiscountDto;
-import com.jzargo.shared.model.SeasonDiscountDto;
 import com.jzargo.entity.Coupon;
 import com.jzargo.entity.ProductDiscount;
 import com.jzargo.entity.SeasonDiscount;
 import com.jzargo.exceptions.DataNotFoundException;
 import com.jzargo.repository.CategoryRepository;
 import com.jzargo.repository.ProductRepository;
+import com.jzargo.shared.model.CouponDto;
+import com.jzargo.shared.model.ProductDiscountDto;
+import com.jzargo.shared.model.SeasonDiscountDto;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ public class DiscountCreateMapper {
         @Override
         @SneakyThrows
         public Coupon map(CouponDto object) {
-            return (Coupon) Coupon.builder()
+            return Coupon.builder()
                     .category(
                         categoryRepository.findById(object.getCategoryId())
                             .orElseThrow(() -> new DataNotFoundException("Category not found"))
@@ -43,7 +43,7 @@ public class DiscountCreateMapper {
     public static class SeasonDiscountCreateMapper implements Mapper<SeasonDiscountDto, SeasonDiscount> {
         @Override
         public SeasonDiscount map(SeasonDiscountDto object) {
-            return (SeasonDiscount) SeasonDiscount.builder()
+            return SeasonDiscount.builder()
                     .discount(object.getDiscount())
                     .discountType(object.getDiscountType())
                     .startDate(object.getStartDate())
@@ -64,7 +64,7 @@ public class DiscountCreateMapper {
         @Override
         @SneakyThrows
         public ProductDiscount map(ProductDiscountDto object) {
-            return (ProductDiscount) ProductDiscount.builder()
+            return ProductDiscount.builder()
                     .product(
                             productRepository.findById(object.getProductId())
                                     .orElseThrow(() -> new DataNotFoundException("Product not found"))

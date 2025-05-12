@@ -1,17 +1,17 @@
 package com.jzargo.entity;
 
+import com.jzargo.shared.common.PaymentType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import com.jzargo.shared.common.PaymentType;
-import static jakarta.persistence.GenerationType.*;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Data
@@ -46,6 +46,4 @@ public class PaymentMethod implements BaseEntity<Long>{
     @Column(name = "brand")
     private String brand;
 
-    @Column(name = "paypal_account")
-    private String paypalAccount;
 }
