@@ -1,25 +1,29 @@
 package com.jzargo.services;
 
+import com.jzargo.common.QPredicate;
+import com.jzargo.entity.Product;
 import com.jzargo.exceptions.DataNotFoundException;
 import com.jzargo.filtration.ProductFilter;
-import com.jzargo.common.QPredicate;
-import com.jzargo.shared.model.ProductCreateAndUpdateDto;
-import com.jzargo.shared.model.ProductReadDto;
-import com.jzargo.entity.Product;
 import com.jzargo.mapper.ProductCreateAndUpdateMapper;
 import com.jzargo.mapper.ProductReadMapper;
 import com.jzargo.repository.ProductRepository;
-
+import com.jzargo.shared.model.ProductCreateAndUpdateDto;
+import com.jzargo.shared.model.ProductDetails;
+import com.jzargo.shared.model.ProductReadDto;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+
 import static com.jzargo.entity.QProduct.product;
 
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductReadMapper productReadMapper;
@@ -36,10 +40,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductReadDto findById(int id) {
+    public ProductDetails findById(int id) {
         return productRepository.findById(id)
-                .map(productReadMapper::map)
+                .map(ProductReadMapper.ProductDetailsReadMapper::map)
                 .orElseThrow();
+
     }
 
 
@@ -48,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
                 .adds(productFilter.tags(), product.tags::contains)
                 .add(productFilter.minPrice(), product.price::goe)
                 .add(productFilter.maxPrice(), product.price::loe)
-                .add(productFilter.userId(), product.user.id::eq)
+                .add(productFilter.userIds(), product.user.id::in)
                 .add(productFilter.category(), product.category.category::eq)
                 .buildAnd();
         return productRepository.findAll(predicate,pageable)
@@ -56,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductReadDto create(ProductCreateAndUpdateDto dto) {
+    public ProductDetails create(ProductCreateAndUpdateDto dto) {
         Product product = productCreateAndUpdateMapper.map(dto);
 
         if (product == null) {
@@ -68,11 +73,11 @@ public class ProductServiceImpl implements ProductService {
 
         Product savedProduct = productRepository.saveAndFlush(product);
 
-        return productReadMapper.map(savedProduct);
+        return ProductReadMapper.ProductDetailsReadMapper.map(savedProduct);
 
     }
     @Override
-    public ProductReadDto update(int id, ProductCreateAndUpdateDto dto) {
+    public ProductDetails update(int id, ProductCreateAndUpdateDto dto) {
         Product old = productRepository.findById(id).orElseThrow();
 
         return Optional.ofNullable(productCreateAndUpdateMapper.map(dto, old))
@@ -83,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
                     product.setImages(savedImages);
                     return productRepository.saveAndFlush(product);
                 })
-                .map(productReadMapper::map)
+                .map(ProductReadMapper.ProductDetailsReadMapper::map)
                 .orElseThrow();
     }
 
@@ -104,8 +109,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public byte[] loadImage(String name) throws IOException {
+        return imageStorageService.getProductFile(name);
+    }
+
+    @Override
     public Page<ProductReadDto> findAllByUserId(Long userId, Pageable pageable) {
          return productRepository.findAllByUserId(userId,pageable)
                  .map(productReadMapper::map);
+    }
+
+    @Override
+    public List<ProductReadDto> findRandom() {
+        return productRepository.findThreeProductsByRandom().stream()
+                .map(productReadMapper::map).toList();
     }
 }

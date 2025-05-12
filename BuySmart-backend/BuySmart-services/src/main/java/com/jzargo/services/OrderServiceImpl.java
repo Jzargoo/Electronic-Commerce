@@ -1,7 +1,5 @@
 package com.jzargo.services;
 
-import com.jzargo.shared.model.OrderCreateAndUpdateDto;
-import com.jzargo.shared.model.OrderReadDto;
 import com.jzargo.entity.Order;
 import com.jzargo.entity.Product;
 import com.jzargo.events.OrderCreatedEvent;
@@ -9,14 +7,16 @@ import com.jzargo.mapper.OrderCreateMapper;
 import com.jzargo.mapper.OrderReadMapper;
 import com.jzargo.repository.OrderRepository;
 import com.jzargo.repository.ProductRepository;
+import com.jzargo.shared.model.OrderCreateAndUpdateDto;
+import com.jzargo.shared.model.OrderReadDto;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final OrderReadMapper orderReadMapper;

@@ -1,20 +1,22 @@
 package com.jzargo.api.rest.controller;
 
 import com.jzargo.api.rest.checker.CheckUserId;
-import com.jzargo.dto.PageResponse;
-import com.jzargo.shared.model.ProductCreateAndUpdateDto;
-import com.jzargo.shared.model.ProductReadDto;
 import com.jzargo.exceptions.DataNotFoundException;
 import com.jzargo.filtration.ProductFilter;
 import com.jzargo.services.ProductService;
+import com.jzargo.shared.model.PageResponse;
+import com.jzargo.shared.model.ProductCreateAndUpdateDto;
+import com.jzargo.shared.model.ProductDetails;
+import com.jzargo.shared.model.ProductReadDto;
 import lombok.SneakyThrows;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -28,41 +30,59 @@ public class ProductController {
 
     // Get all products with filters and pagination
     @GetMapping("/view")
-    public PageResponse<ProductReadDto> findAll(@ModelAttribute ProductFilter productFilter, Pageable pageable) {
-        return PageResponse.of(productService.findAll(productFilter, pageable));
+    public ResponseEntity<PageResponse<ProductReadDto>> findAll(@ModelAttribute ProductFilter productFilter, Pageable pageable) {
+        if (productFilter == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Page<ProductReadDto> pages = productService.findAll(productFilter, pageable);
+        return ResponseEntity.ok(PageResponse.of(
+                pages.getSize(),pages.getTotalElements(),
+                pages.getTotalPages(), pages.getContent()
+        ));
+    }
+
+    @GetMapping("view/random")
+    public ResponseEntity<List<ProductReadDto>> random(){
+        List<ProductReadDto> random = productService.findRandom();
+        return ResponseEntity.ok(random);
     }
 
     // Get all products for a specific user by userId with pagination
-    @GetMapping("/view/{userId}")
+    @GetMapping("/view/users/{userId}")
     public PageResponse<ProductReadDto> findAllByUserId(@PathVariable Long userId, Pageable pageable) {
-        return PageResponse.of(productService.findAllByUserId(userId, pageable));
+        Page<ProductReadDto> pages = productService.findAllByUserId(userId, pageable);
+        return PageResponse.of(
+                pages.getSize(),pages.getTotalElements(),
+                pages.getTotalPages(), pages.getContent()
+        );
     }
 
     // Update an existing product
     @SneakyThrows
     @CheckUserId
     @PutMapping("/edit/{userId}/{productId}")
-    public ResponseEntity<Void> update(@RequestBody ProductCreateAndUpdateDto dto,
+    public ResponseEntity<ProductDetails> update(@RequestBody ProductCreateAndUpdateDto dto,
                                        @PathVariable Long userId,
                                        @PathVariable Integer productId) {
-        ProductReadDto updatedProduct = productService.update(productId, dto);
-        return redirectToUserStore(userId);
+        ProductDetails updatedProduct = productService.update(productId, dto);
+        return ResponseEntity.ok(updatedProduct);
     }
 
     // Create a new product
     @SneakyThrows
     @CheckUserId
     @PostMapping(path = "/edit/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> save(@ModelAttribute ProductCreateAndUpdateDto dto,
-                                     @PathVariable Long userId) {
-        productService.create(dto);
-        return redirectToUserStore(userId);
+    public ResponseEntity<ProductDetails> save(@ModelAttribute ProductCreateAndUpdateDto dto,
+                                               @PathVariable Long userId) {
+        return ResponseEntity.ok(
+                productService.create(dto)
+        );
     }
 
     // Get a product by ID
-    @GetMapping("/view/{id}")
-    public ResponseEntity<ProductReadDto> findById(@PathVariable Integer id) {
-        ProductReadDto product = productService.findById(id);
+    @GetMapping("/view/id/{id}")
+    public ResponseEntity<ProductDetails> findById(@PathVariable Integer id) {
+        ProductDetails product = productService.findById(id);
         if (product == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -75,31 +95,40 @@ public class ProductController {
     public ResponseEntity<Void> delete(@PathVariable Long userId, @PathVariable Integer productId) {
         boolean deleted = productService.delete(productId);
         if (deleted) {
-            return redirectToUserStore(userId);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
-    // Redirect user to their store page
-    private static ResponseEntity<Void> redirectToUserStore(Long userId) {
-        String redirectUrl = "/api/products/users/" + userId;
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", redirectUrl);
-
-        return ResponseEntity.status(HttpStatus.FOUND)
-                .headers(headers)
-                .build();
-    }
-
     // Load product images for a specific product by ID
     @GetMapping("/view/images/{id}")
-    public ResponseEntity<List<byte[]>> loadImages(@PathVariable Integer id) throws DataNotFoundException {
-        List<byte[]> images = productService.loadImages(id);
+    public ResponseEntity<List<byte[]>> loadImages(@PathVariable Integer id) {
+
+        try {
+            List<byte[]> images = productService.loadImages(id);
         if (images == null || images.isEmpty()) {
-            throw new DataNotFoundException("Images not found for product with ID " + id);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.ok(images);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/view/image/{name}")
+    public ResponseEntity<byte[]> loadImage(@PathVariable String name) {
+
+        try {
+        byte[] image = productService.loadImage(name);
+
+        if (image == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(image);
+
+        } catch (IOException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

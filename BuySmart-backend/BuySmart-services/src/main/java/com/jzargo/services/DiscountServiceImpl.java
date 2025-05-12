@@ -1,7 +1,5 @@
 package com.jzargo.services;
 
-import com.jzargo.shared.common.DiscountType;
-import com.jzargo.shared.model.DiscountDto;
 import com.jzargo.entity.Discount;
 import com.jzargo.entity.Product;
 import com.jzargo.exceptions.DataNotFoundException;
@@ -11,8 +9,11 @@ import com.jzargo.repository.CouponRepository;
 import com.jzargo.repository.ProductDiscountRepository;
 import com.jzargo.repository.ProductRepository;
 import com.jzargo.repository.SeasonDiscountRepository;
+import com.jzargo.shared.common.DiscountType;
+import com.jzargo.shared.model.DiscountDto;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class DiscountServiceImpl implements DiscountService{
     private final ProductRepository productRepository;
     private final SeasonDiscountRepository seasonDiscountRepository;
@@ -38,7 +40,7 @@ public class DiscountServiceImpl implements DiscountService{
     @SneakyThrows
     @Override
     public double calculateDiscount(Double price, int quantity, DiscountDto dto) {
-        if (dto == null || dto== null) {
+        if (dto == null) {
             throw new DiscountException("Discount cannot be null");
         }
         return dto.getDiscountType().equals(DiscountType.PERCENT)?

@@ -8,6 +8,7 @@ module com.jzargo.buysmartgui {
     requires jdk.httpserver;
     requires com.fasterxml.jackson.databind;
     requires com.jzargo.shared.main;
+    requires org.aspectj.weaver;
 
 
     opens com.jzargo.buysmartgui;

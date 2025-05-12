@@ -1,24 +1,24 @@
 package com.jzargo.services;
 
-import com.jzargo.exceptions.UserAlreadyExistsException;
-import com.jzargo.shared.model.UserCreateAndUpdateDto;
-import com.jzargo.shared.model.UserReadDto;
 import com.jzargo.entity.User;
 import com.jzargo.exceptions.DataNotFoundException;
+import com.jzargo.exceptions.UserAlreadyExistsException;
 import com.jzargo.mapper.UserCreateAndUpdateMapper;
 import com.jzargo.mapper.UserReadMapper;
 import com.jzargo.repository.UserRepository;
-import lombok.SneakyThrows;
+import com.jzargo.shared.model.UserCreateAndUpdateDto;
+import com.jzargo.shared.model.UserReadDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 @Slf4j
 @Service
+@Transactional
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
@@ -51,9 +51,10 @@ public class UserServiceImpl implements UserService{
         map.setPassword(
                 passwordEncoder.encode(dto.getPassword())
         );
-        if (userRepository
-                .existsByUsernameOrPhoneOrEmail(
-                        map.getUsername(), dto.getPhone(), dto.getEmail())){
+
+        if (userRepository.existsByUsername(map.getUsername()) ||
+                (dto.getPhone() != null && userRepository.existsByPhone(dto.getPhone())) ||
+                (dto.getEmail() != null && userRepository.existsByEmail(dto.getEmail()))) {
             throw new UserAlreadyExistsException();
         }
         User user = userRepository.saveAndFlush(map);

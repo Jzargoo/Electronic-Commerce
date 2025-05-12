@@ -1,13 +1,14 @@
 package com.jzargo.api.rest.controller;
 
 import com.jzargo.api.rest.checker.CheckUserId;
-import com.jzargo.dto.PageResponse;
-import com.jzargo.shared.model.PaymentReadDto;
-import com.jzargo.shared.model.UserReadDto;
 import com.jzargo.entity.User;
 import com.jzargo.services.PaymentService;
 import com.jzargo.services.PaymentServiceImpl;
 import com.jzargo.services.UserService;
+import com.jzargo.shared.model.PageResponse;
+import com.jzargo.shared.model.PaymentReadDto;
+import com.jzargo.shared.model.UserReadDto;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,10 +33,11 @@ public class PaymentController {
     @CheckUserId
     @GetMapping("/user/{userId}")
     ResponseEntity<PageResponse<PaymentReadDto>> getUserPurchases(@PathVariable Long userId, @ModelAttribute Pageable pageable){
+        Page<PaymentReadDto> pages = paymentService.findAllByUserId(userId, pageable);
         return ResponseEntity.ok(
             PageResponse.of(
-                    paymentService.findAllByUserId(userId,pageable)
-            )
+                pages.getSize(),pages.getTotalElements(),
+                pages.getTotalPages(), pages.getContent())
         );
     }
 
@@ -57,6 +59,4 @@ public class PaymentController {
 //    public ResponseEntity<PaymentReadDto> createPurchase(@RequestBody PaymentCreateAndUpdateDto request) {
 //    }
 //
-    //@PostMapping("/webhook")
-    //p
 }

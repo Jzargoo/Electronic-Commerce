@@ -1,7 +1,5 @@
 package com.jzargo.security;
 
-import com.jzargo.services.UserService;
-import com.jzargo.services.UserServiceImpl;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -12,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -44,10 +41,12 @@ public class SpringSecurityWebConfigurer {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/users/{userId:[0-9]+}",
-                                "/api/auth/**",
-                                "/api/products/view/**").permitAll()
-                        .requestMatchers("/api/products/edit/**").permitAll()
+                        .requestMatchers(
+                                    "/api/*/view/**",
+                                "/api/auth/**"
+                        ).permitAll()
+                        .requestMatchers("/api/products/view/random").permitAll()
+                        .requestMatchers("/api/products/edit/**").hasAuthority("SELLER")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
@@ -64,7 +63,7 @@ public class SpringSecurityWebConfigurer {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("*");
-        config.addAllowedMethod("POST");
+        config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

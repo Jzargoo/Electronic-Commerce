@@ -1,12 +1,12 @@
 package com.jzargo.api.rest.controller;
 
 import com.jzargo.api.rest.checker.CheckUserId;
+import com.jzargo.services.OrderService;
 import com.jzargo.shared.model.OrderCreateAndUpdateDto;
 import com.jzargo.shared.model.OrderReadDto;
-import com.jzargo.dto.PageResponse;
-import com.jzargo.services.OrderService;
+import com.jzargo.shared.model.PageResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +24,10 @@ public class OrderController {
     @CheckUserId
     @GetMapping("user/{userId}")
     public PageResponse<OrderReadDto> findAllByUserId(@PathVariable Long userId, Pageable pageable) {
+        Page<OrderReadDto> pages = orderService.findAllByUserId(userId, pageable);
         return PageResponse.of(
-                orderService.findAllByUserId(userId, pageable)
+                pages.getSize(),pages.getTotalElements(),
+                pages.getTotalPages(), pages.getContent()
         );
     }
 
@@ -55,15 +57,4 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    // Helper method for redirecting to the user's orders page
-    private static ResponseEntity<Void> redirectToUserOrder(Long userId) {
-        String redirectUrl = "/api/orders/users/" + userId;
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", redirectUrl);
-
-        return ResponseEntity.status(HttpStatus.FOUND)
-                .headers(headers)
-                .build();
-    }
 }

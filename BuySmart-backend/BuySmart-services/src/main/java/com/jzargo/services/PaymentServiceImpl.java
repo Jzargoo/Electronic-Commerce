@@ -2,10 +2,6 @@ package com.jzargo.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jzargo.shared.common.PaymentStatus;
-import com.jzargo.shared.common.PaymentType;
-import com.jzargo.shared.model.PaymentCreateAndUpdateDto;
-import com.jzargo.shared.model.PaymentReadDto;
 import com.jzargo.entity.Order;
 import com.jzargo.entity.Payment;
 import com.jzargo.entity.PaymentMethod;
@@ -18,6 +14,10 @@ import com.jzargo.repository.OrderRepository;
 import com.jzargo.repository.PaymentMethodRepository;
 import com.jzargo.repository.PaymentRepository;
 import com.jzargo.repository.UserRepository;
+import com.jzargo.shared.common.PaymentStatus;
+import com.jzargo.shared.common.PaymentType;
+import com.jzargo.shared.model.PaymentCreateAndUpdateDto;
+import com.jzargo.shared.model.PaymentReadDto;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.*;
@@ -30,6 +30,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +40,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 public class PaymentServiceImpl implements PaymentService{
     private final PaymentMethodRepository paymentMethodRepository;
     @Value("${stripe.api.key}")

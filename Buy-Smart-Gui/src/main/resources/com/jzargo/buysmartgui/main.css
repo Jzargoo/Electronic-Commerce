@@ -1,0 +1,36 @@
+.header{
+    -fx-text-fill: white;
+}
+.rounding{
+    -fx-border-color: #404040;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+}
+
+.secondary-bg {
+    -fx-background-color: #323232;
+}
+.view{
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}
+
+#categoryLabel{
+    -fx-text-fill: white;
+}
+
+.hyperlink.categories,
+.hyperlink.categories:hover,
+.hyperlink.categories:armed,
+.hyperlink.categories:focused,
+.price
+{
+    -fx-text-fill: white;
+    -fx-font-family: "FreeSans";
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+    -fx-underline: false;
+}
+
+.search {
+}

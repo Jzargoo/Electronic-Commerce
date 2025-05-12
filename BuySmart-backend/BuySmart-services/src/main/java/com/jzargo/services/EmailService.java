@@ -1,7 +1,6 @@
 package com.jzargo.services;
 
 import com.jzargo.entity.ResetPasswordToken;
-import com.jzargo.entity.User;
 import com.jzargo.exceptions.DataNotFoundException;
 import com.jzargo.exceptions.EmailException;
 import com.jzargo.exceptions.EmailExistException;
@@ -11,15 +10,16 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
 import java.util.UUID;
 
 import static org.springframework.http.HttpMethod.POST;
 
 @Service
+@Transactional
 public class EmailService {
     private final UserRepository userRepository;
     private final ResetPasswordTokenRepository resetPasswordTokenRepository;

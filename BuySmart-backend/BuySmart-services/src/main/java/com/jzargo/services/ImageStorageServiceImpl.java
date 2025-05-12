@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -96,5 +98,10 @@ public class ImageStorageServiceImpl implements ImageStorageService{
         for(String s:c){
             Files.delete(Path.of(uploadProductDir+s));
         }
+    }
+
+    @Override
+    public byte[] getProductFile(String name) throws IOException {
+        return Files.readAllBytes(Path.of(uploadProductDir + name));
     }
 }

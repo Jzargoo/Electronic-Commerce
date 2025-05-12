@@ -16,6 +16,6 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "season_discounts")
 public class SeasonDiscount extends Discount{
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "category_id")
     private Category category;
 }

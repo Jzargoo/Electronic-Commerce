@@ -1,8 +1,6 @@
 package com.jzargo.services;
 
 import com.jzargo.common.QPredicate;
-import com.jzargo.shared.model.ReviewCreateAndUpdateDto;
-import com.jzargo.shared.model.ReviewReadDto;
 import com.jzargo.entity.QReview;
 import com.jzargo.entity.Review;
 import com.jzargo.filtration.ReviewFilter;
@@ -10,16 +8,20 @@ import com.jzargo.mapper.ReviewReadMapper;
 import com.jzargo.repository.ProductRepository;
 import com.jzargo.repository.ReviewRepository;
 import com.jzargo.repository.UserRepository;
+import com.jzargo.shared.model.ReviewCreateAndUpdateDto;
+import com.jzargo.shared.model.ReviewReadDto;
 import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 
 @Slf4j
 @Service
+@Transactional
 public class ReviewServiceImpl implements ReviewService{
 
     private final UserRepository userRepository;

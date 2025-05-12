@@ -1,8 +1,6 @@
 package com.jzargo.services;
 
 import com.jzargo.common.CartItemId;
-import com.jzargo.shared.model.CartDto;
-import com.jzargo.shared.model.CartItemDto;
 import com.jzargo.entity.Cart;
 import com.jzargo.entity.CartItem;
 import com.jzargo.entity.Product;
@@ -12,15 +10,19 @@ import com.jzargo.repository.CartItemRepository;
 import com.jzargo.repository.CartRepository;
 import com.jzargo.repository.ProductRepository;
 import com.jzargo.repository.UserRepository;
+import com.jzargo.shared.model.CartDto;
+import com.jzargo.shared.model.CartItemDto;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class CartServiceImpl implements CartService{
 
     private final CartRepository cartRepository;

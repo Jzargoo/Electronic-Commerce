@@ -1,38 +1,4 @@
-CREATE OR REPLACE FUNCTION update_updated_at_column()
-    RETURNS TRIGGER AS
-$$
-BEGIN
-    NEW.updated_at = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION  prevent_paid_modification() RETURNS TRIGGER AS $$
-BEGIN
-    IF OLD.status = 'PAID' AND NEW.status NOT IN ('REFUNDED') THEN
-        RAISE EXCEPTION 'PAID платежи можно изменить только на REFUNDED';
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION check_payment_status_transition() RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW.status = 'PAID' AND OLD.status NOT IN ('PENDING') THEN
-        RAISE EXCEPTION 'Платеж можно перевести в PAID только из PENDING';
-    END IF;
-
-    IF NEW.status = 'REFUNDED' AND OLD.status NOT IN ('PAID') THEN
-        RAISE EXCEPTION 'Возврат возможен только из PAID';
-    END IF;
-
-    IF NEW.status = 'FAILED' AND OLD.status NOT IN ('PENDING') THEN
-        RAISE EXCEPTION 'FAILED возможен только из PENDING';
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+;
 
 
 CREATE TABLE payment_methods
@@ -61,23 +27,6 @@ CREATE TABLE payments
     metadata           JSON                NULL
 );
 
-
-
-CREATE OR REPLACE TRIGGER block_paid_modifications
-    BEFORE UPDATE ON payments
-    FOR EACH ROW
-EXECUTE FUNCTION prevent_paid_modification();
-
-CREATE OR REPLACE TRIGGER enforce_payment_status_transition
-    BEFORE UPDATE ON payments
-    FOR EACH ROW
-EXECUTE FUNCTION check_payment_status_transition();
-
-CREATE OR REPLACE TRIGGER update_payments_updated_at
-    BEFORE UPDATE
-    ON payments
-    FOR EACH ROW
-EXECUTE FUNCTION update_updated_at_column();
 
 
 
