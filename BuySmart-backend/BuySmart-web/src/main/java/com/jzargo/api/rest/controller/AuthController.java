@@ -67,8 +67,8 @@ public class AuthController {
     public ResponseEntity<String> reset(@RequestParam("token") String token,
                                         @RequestParam("password") String newPassword,
                                         @RequestParam("email") String email) {
-        if (emailService.verifyToken(token, email)) {
-            userService.updatePassword(newPassword, email);
+        if (emailService.verifyToken(token, email)
+                && userService.updatePassword(newPassword, email)) {
             return ResponseEntity.ok("Password reset successfully");
         }
         return ResponseEntity.badRequest().body("Token is invalid or expired");
