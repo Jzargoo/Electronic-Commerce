@@ -2,10 +2,15 @@ package com.jzargo.buysmartgui.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jzargo.buysmartgui.errors.ProductNotFoundException;
 import com.jzargo.buysmartgui.util.JWTStorage;
+import com.jzargo.buysmartgui.util.QueryStringBuilder;
+import com.jzargo.shared.filters.ProductFilter;
+import com.jzargo.shared.model.PageResponse;
 import com.jzargo.shared.model.ProductReadDto;
 import lombok.SneakyThrows;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -54,5 +59,24 @@ public class ProductService {
                 .header("Accept", "application/json")
                 .build();
         return client.send(req, HttpResponse.BodyHandlers.ofByteArray()).body();
+    }
+
+    public PageResponse<ProductReadDto> findAll(ProductFilter filter) throws IOException,
+            InterruptedException, ProductNotFoundException {
+        
+        HttpRequest build = HttpRequest.newBuilder()
+                .GET()
+                .uri(
+                        URI.create(basicUrl + "/view?" + QueryStringBuilder.toQueryString(filter))
+                )
+                .build();
+        HttpResponse<String> send = client.send(build, HttpResponse.BodyHandlers.ofString());
+
+        PageResponse<ProductReadDto> body = mapper.readValue(send.body(), new TypeReference<>() {});
+
+
+        if(body == null || body.content().isEmpty()) throw new ProductNotFoundException();
+
+        return body;
     }
 }

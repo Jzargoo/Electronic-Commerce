@@ -3,10 +3,10 @@ package com.jzargo.services;
 import com.jzargo.common.QPredicate;
 import com.jzargo.entity.Product;
 import com.jzargo.exceptions.DataNotFoundException;
-import com.jzargo.filtration.ProductFilter;
 import com.jzargo.mapper.ProductCreateAndUpdateMapper;
 import com.jzargo.mapper.ProductReadMapper;
 import com.jzargo.repository.ProductRepository;
+import com.jzargo.shared.filters.ProductFilter;
 import com.jzargo.shared.model.ProductCreateAndUpdateDto;
 import com.jzargo.shared.model.ProductDetails;
 import com.jzargo.shared.model.ProductReadDto;
@@ -55,6 +55,7 @@ public class ProductServiceImpl implements ProductService {
                 .add(productFilter.maxPrice(), product.price::loe)
                 .add(productFilter.userIds(), product.user.id::in)
                 .add(productFilter.category(), product.category.category::eq)
+                .add(productFilter.name(), product.name::contains)
                 .buildAnd();
         return productRepository.findAll(predicate,pageable)
                 .map(productReadMapper::map);

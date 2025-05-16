@@ -13,7 +13,7 @@
             <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
         </HBox.margin>
         <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
-        <Hyperlink styleClass="header" stylesheets="@main.css" text="buy-smart">
+        <Hyperlink onAction="#loadHome" styleClass="header" stylesheets="@../main.css" text="buy-smart">
             <font>
                 <Font name="FreeSans Bold" size="17.0" />
             </font>
@@ -28,13 +28,12 @@
         </HBox.margin>
     </TextField>
     <HBox alignment="CENTER_RIGHT">
-        <VBox style="-fx-background-image: transparent;" HBox.hgrow="NEVER">
+        <VBox HBox.hgrow="NEVER">
             <cursor>
-                <Cursor fx:constant="DEFAULT"/>
+                <Cursor fx:constant="DEFAULT" />
             </cursor>
-            <ImageView fitHeight="49.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true"
-                       style="-fx-background-opacity: 0.0;">
-                <Image url="@Images/headerAndFooter/images.png"/>
+            <ImageView fitHeight="49.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" style="-fx-background-opacity: 0.0;">
+                <Image url="@../Images/headerAndFooter/images.png" />
             </ImageView>
         </VBox>
         <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">

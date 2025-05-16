@@ -15,11 +15,11 @@ public class HelloApplication extends Application {
 
         String s = JWTStorage.loadToken();
         AuthService instance = AuthService.getInstance();
-        FXMLLoader fxmlLoader = null;
+        FXMLLoader fxmlLoader;
         if(instance.checkJWT(s)){
-            fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("HomePage.fxml"));
+            fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("pages/HomePage.fxml"));
         } else{
-            fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("WelcomePage.fxml"));
+            fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("pages/WelcomePage.fxml"));
         }
 
         Scene scene = new Scene(fxmlLoader.load(), 1000, 1000);

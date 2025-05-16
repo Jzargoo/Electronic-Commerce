@@ -2,8 +2,8 @@ package com.jzargo.api.rest.controller;
 
 import com.jzargo.api.rest.checker.CheckUserId;
 import com.jzargo.exceptions.DataNotFoundException;
-import com.jzargo.filtration.ProductFilter;
 import com.jzargo.services.ProductService;
+import com.jzargo.shared.filters.ProductFilter;
 import com.jzargo.shared.model.PageResponse;
 import com.jzargo.shared.model.ProductCreateAndUpdateDto;
 import com.jzargo.shared.model.ProductDetails;

@@ -10,7 +10,7 @@
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
-             <fx:include source="banner.fxml" />
+             <fx:include source="../template/banner.fxml" />
             <VBox>
                <children>
                   <VBox>

@@ -174,11 +174,6 @@ public class PaymentServiceImpl implements PaymentService{
                 build.setType(PaymentType.CARD);
             }
 
-            case "paypal" -> {
-                build.setPaypalAccount(paymentMethod.getPaypal().getPayerId());
-                build.setType(PaymentType.PAYPAL);
-
-            }
 
             case "us_bank_account" -> {
                 build.setBrand(

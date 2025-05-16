@@ -1,4 +1,4 @@
-package com.jzargo.filtration;
+package com.jzargo.shared.filters;
 
 import java.time.LocalDateTime;
 
