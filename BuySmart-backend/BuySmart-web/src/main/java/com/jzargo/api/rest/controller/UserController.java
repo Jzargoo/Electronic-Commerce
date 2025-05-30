@@ -13,9 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.Optional;
-
 
 @Data
 @RequestMapping("/api/users")

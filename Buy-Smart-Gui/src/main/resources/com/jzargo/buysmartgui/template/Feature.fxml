@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
+
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-
+<?import java.lang.String?>
 <VBox alignment="CENTER" stylesheets="@../main.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox spacing="20.0">

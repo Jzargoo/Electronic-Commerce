@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.stage.Window;
 
-import static com.jzargo.buysmartgui.ui.DialogController.*;
+import static com.jzargo.buysmartgui.ui.DialogController.showNameDialog;
 
 
 public class FooterController {

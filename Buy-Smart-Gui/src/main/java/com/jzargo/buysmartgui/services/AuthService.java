@@ -5,7 +5,6 @@ import com.jzargo.buysmartgui.util.JWTStorage;
 import com.jzargo.shared.common.BaseRole;
 import com.jzargo.shared.model.LoginCreateDto;
 import com.jzargo.shared.model.UserCreateAndUpdateDto;
-import com.sun.jdi.InvocationException;
 import lombok.SneakyThrows;
 
 import java.io.IOException;

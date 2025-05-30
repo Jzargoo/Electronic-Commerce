@@ -1,13 +1,13 @@
 package com.jzargo.buysmartgui.services;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jzargo.buysmartgui.ui.DialogController;
 import com.jzargo.buysmartgui.util.JWTStorage;
 import com.jzargo.shared.model.UserCreateAndUpdateDto;
 import com.jzargo.shared.model.UserReadDto;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
