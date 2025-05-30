@@ -1,11 +1,18 @@
 package com.jzargo.services;
 
 
+import com.jzargo.entity.Category;
+import com.jzargo.repository.CategoryRepository;
+import com.jzargo.shared.common.Categories;
 import com.jzargo.shared.filters.ReviewFilter;
 import com.jzargo.shared.model.ReviewCreateAndUpdateDto;
 import com.jzargo.shared.model.ReviewReadDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 public interface ReviewService {
@@ -15,4 +22,25 @@ public interface ReviewService {
     Page<ReviewReadDto> getReviewsByProductId( ReviewFilter reviewFilter, Pageable pageable);
     Page<ReviewReadDto> getReviewsByUserId(Long userId, Pageable pageable);
     ReviewReadDto getReviewById(Long reviewId);
+
+    interface CategoryService {
+        List<String> getCategoriesLimit(int count);
+    }
+
+    @Service
+    @Transactional(readOnly = true)
+    class CategoryServiceImpl implements CategoryService{
+        private final CategoryRepository categoryRepository;
+
+        public CategoryServiceImpl(CategoryRepository categoryRepository) {
+            this.categoryRepository = categoryRepository;
+        }
+
+        @Override
+        public List<String> getCategoriesLimit(int count) {
+            return categoryRepository.findRandom(count).stream()
+                    .map(Category::getCategory)
+                    .map(Categories::name).toList();
+        }
+    }
 }

@@ -36,3 +36,8 @@
 
 .LoginText {
 }
+
+.text-area .content {
+    -fx-background-color: black ;
+}
+

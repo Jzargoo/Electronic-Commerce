@@ -3,6 +3,9 @@ package com.jzargo.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "address")
@@ -16,4 +19,7 @@ public class Address implements BaseEntity<Long>{
     private String country;
     @Column(name = "zip_code")
     private String zipCode;
+    @ManyToMany(mappedBy = "addresses")
+    private List<UserSettings> userSettings = new ArrayList<>();
+
 }

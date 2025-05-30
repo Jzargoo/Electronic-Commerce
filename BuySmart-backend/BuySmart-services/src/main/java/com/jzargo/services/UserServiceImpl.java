@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Optional;
 @Slf4j
 @Service
@@ -24,17 +25,17 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final UserReadMapper userReadMapper;
     private final UserCreateAndUpdateMapper userCreateAndUpdateMapper;
-    private final ImageStorageServiceImpl imageStorageServiceImpl;
+    private final ImageStorageService imageStorageService;
     private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository, UserReadMapper userReadMapper,
                            UserCreateAndUpdateMapper userCreateAndUpdateMapper,
-                           ImageStorageServiceImpl imageStorageServiceImpl, PasswordEncoder passwordEncoder) {
+                           ImageStorageService imageStorageService, PasswordEncoder passwordEncoder) {
 
         this.userRepository = userRepository;
         this.userReadMapper = userReadMapper;
         this.userCreateAndUpdateMapper = userCreateAndUpdateMapper;
-        this.imageStorageServiceImpl = imageStorageServiceImpl;
+        this.imageStorageService = imageStorageService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -46,12 +47,14 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public UserReadDto create(UserCreateAndUpdateDto dto) throws UserAlreadyExistsException {
+    public UserReadDto create(UserCreateAndUpdateDto dto) throws UserAlreadyExistsException, IOException {
         User map = userCreateAndUpdateMapper.map(dto);
         map.setPassword(
                 passwordEncoder.encode(dto.getPassword())
         );
-
+        map.setProfileImage(
+                imageStorageService.storeUserFile(dto.getProfileImage())
+        );
         if (userRepository.existsByUsername(map.getUsername()) ||
                 (dto.getPhone() != null && userRepository.existsByPhone(dto.getPhone())) ||
                 (dto.getEmail() != null && userRepository.existsByEmail(dto.getEmail()))) {
@@ -67,9 +70,13 @@ public class UserServiceImpl implements UserService{
         User old = userRepository.findById(id).orElseThrow();
         return Optional.ofNullable(userCreateAndUpdateMapper.map(dto, old))
                 .map(user -> {
-                    user.setProfileImage(
-                        imageStorageServiceImpl.storeUserFile(dto.getProfileImage())
-                    );
+                    try {
+                        user.setProfileImage(
+                            imageStorageService.storeUserFile(dto.getProfileImage())
+                        );
+                    } catch (IOException e) {
+                        throw new RuntimeException();
+                    }
                     return userRepository.saveAndFlush(user);
                 })
                 .map(userReadMapper::map)
@@ -88,7 +95,7 @@ public class UserServiceImpl implements UserService{
                 !(exist && old.getProfileImage()
                         .equals(System.getenv("DUMMY")))
         ) {
-            imageStorageServiceImpl.deleteUserFile(old.getProfileImage());
+            imageStorageService.deleteUserFile(old.getProfileImage());
         }
 
         return exist;
@@ -103,12 +110,14 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public byte[] getProfileImage(Long id) throws DataNotFoundException {
-        return imageStorageServiceImpl.getUserFile(
+        return imageStorageService.getUserFile(
                 userRepository.findById(id)
                         .map(User::getProfileImage)
                         .orElseThrow(DataNotFoundException::new)
         );
     }
+
+
 
     @Override
     public boolean updatePassword(String newPassword, String email) {

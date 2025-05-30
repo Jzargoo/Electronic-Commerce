@@ -43,7 +43,8 @@ public class SpringSecurityWebConfigurer {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(
                                     "/api/*/view/**",
-                                "/api/auth/**"
+                                "/api/auth/**",
+                                "api/auth/checkPermission"
                         ).permitAll()
                         .requestMatchers("/api/products/view/random").permitAll()
                         .requestMatchers("/api/products/edit/**").hasAuthority("SELLER")

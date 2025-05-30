@@ -13,6 +13,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -23,11 +25,14 @@ public class AuthController {
     private final EmailService emailService;
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
-    public AuthController(TokenService tokenService, EmailService emailService, UserService userService, AuthenticationManager authenticationManager) {
+    private final JwtDecoder jwtDecoder;
+
+    public AuthController(TokenService tokenService, EmailService emailService, UserService userService, AuthenticationManager authenticationManager, JwtDecoder jwtDecoder) {
         this.tokenService = tokenService;
         this.emailService = emailService;
         this.userService=userService;
         this.authenticationManager = authenticationManager;
+        this.jwtDecoder = jwtDecoder;
     }
 
     @PostMapping("/token")
@@ -98,7 +103,6 @@ public class AuthController {
                     )
             );
             SecurityContextHolder.getContext().setAuthentication(auth);
-
             String token = tokenService.generateToken(auth);
             return ResponseEntity.status(HttpStatus.CREATED).body(token);
         } catch (UserAlreadyExistsException e) {
@@ -107,15 +111,15 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed");
         }
     }
-    @GetMapping("/check")
-    public ResponseEntity<Void> check(){
-
+    @GetMapping("/checkPermission")
+    public ResponseEntity<String> checkPermission(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken ||
                 !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("GUEST");
         } else {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body(((Jwt)authentication.getPrincipal())
+                    .getClaim("scope"));
         }
 
     }

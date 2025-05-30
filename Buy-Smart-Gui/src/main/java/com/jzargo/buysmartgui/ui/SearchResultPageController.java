@@ -57,6 +57,8 @@ public class SearchResultPageController {
             Label label = new Label("By that parameters cannot find a product");
             container.getChildren().add(label);
             label.getStyleClass().add(".standard-Font-Style");
+        } finally {
+            filter = null;
         }
     }
 }

@@ -2,8 +2,10 @@ package com.jzargo.buysmartgui.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jzargo.buysmartgui.util.JWTStorage;
+import com.jzargo.shared.common.BaseRole;
 import com.jzargo.shared.model.LoginCreateDto;
 import com.jzargo.shared.model.UserCreateAndUpdateDto;
+import com.sun.jdi.InvocationException;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Arrays;
 
 public class AuthService {
     public static final AuthService INSTANCE = new AuthService();
@@ -76,23 +79,28 @@ public class AuthService {
 
     }
     
-    @SneakyThrows
-    public boolean checkJWT(String s){
+    public BaseRole checkPermission(String s){
 
          if (s == null || s.isBlank()) {
-             return false;
+             return BaseRole.GUEST;
          }
 
         HttpRequest jwt = HttpRequest.newBuilder()
                 .GET()
                 .uri(
                         URI.create(
-                                basicUrl + "/api/auth/check"
+                                basicUrl + "/api/auth/checkPermission"
                         ))
                 .header("Authorization", "Bearer " + s)
                 .build();
-        HttpResponse<Void> send = client.send(jwt, HttpResponse.BodyHandlers.discarding());
-
-        return send.statusCode() == 200;
+        HttpResponse<String> send = null;
+        try {
+            send = client.send(jwt, HttpResponse.BodyHandlers.ofString());
+            return Arrays.stream(send.body().split(" "))
+                    .map(BaseRole::valueOf)
+                    .max(Enum::compareTo).orElse(BaseRole.GUEST);
+        } catch (Exception e){
+            return BaseRole.GUEST;
+        }
     }
 }

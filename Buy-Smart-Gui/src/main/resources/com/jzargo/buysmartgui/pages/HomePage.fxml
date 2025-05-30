@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import java.lang.String?>
+
 <BorderPane stylesheets="@../main.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzargo.buysmartgui.ui.HomePageController">
    <top>
       <fx:include source="../template/banner.fxml" />
@@ -36,13 +39,13 @@
                            <Insets bottom="10.0" />
                         </VBox.margin>
                      </Label>
-                     <Hyperlink fx:id="category1" styleClass="categories" text="Category Link 1" />
-                     <Hyperlink fx:id="category2" styleClass="categories" text="Category Link 2">
+                     <Hyperlink fx:id="category1" onAction="#loadSearchResultPage" styleClass="categories" text="Category Link 1" />
+                     <Hyperlink fx:id="category2" onAction="#loadSearchResultPage" styleClass="categories" text="Category Link 2">
                         <VBox.margin>
                            <Insets bottom="5.0" top="5.0" />
                         </VBox.margin>
                      </Hyperlink>
-                     <Hyperlink fx:id="category3" styleClass="categories" text="Category Link 3" />
+                     <Hyperlink fx:id="category3" onAction="#loadSearchResultPage" styleClass="categories" text="Category Link 3" />
                   </children>
                   <styleClass>
                      <String fx:value="secondary-bg" />

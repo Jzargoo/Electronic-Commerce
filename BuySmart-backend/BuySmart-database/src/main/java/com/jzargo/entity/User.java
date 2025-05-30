@@ -62,10 +62,8 @@ public class User implements BaseEntity<Long>, UserDetails {
     )
     private List<PaymentMethod> paymentMethods = new ArrayList<>();
 
-    @Builder.Default
-    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL,
-            orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Cart> carts = new ArrayList<>();
+    @OneToOne(mappedBy = "buyer")
+    private Cart cart;
 
 
     @Builder.Default

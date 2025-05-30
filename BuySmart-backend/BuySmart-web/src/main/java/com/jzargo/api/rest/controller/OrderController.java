@@ -1,6 +1,5 @@
 package com.jzargo.api.rest.controller;
 
-import com.jzargo.api.rest.checker.CheckUserId;
 import com.jzargo.services.OrderService;
 import com.jzargo.shared.model.OrderCreateAndUpdateDto;
 import com.jzargo.shared.model.OrderReadDto;
@@ -21,7 +20,6 @@ public class OrderController {
         this.orderService = orderService1;
     }
 
-    @CheckUserId
     @GetMapping("user/{userId}")
     public PageResponse<OrderReadDto> findAllByUserId(@PathVariable Long userId, Pageable pageable) {
         Page<OrderReadDto> pages = orderService.findAllByUserId(userId, pageable);
@@ -32,24 +30,21 @@ public class OrderController {
     }
 
     // Find an order by ID and userId
-    @CheckUserId
     @GetMapping("{userId}/{id}")
-    public OrderReadDto findById(@PathVariable Long userId, @PathVariable Long id) {
+    public OrderReadDto findById( @PathVariable Long id) {
         return orderService.findById(id);
     }
 
     // Create a new order for the user
-    @CheckUserId
     @PostMapping("/{userId}")
-    public ResponseEntity<Void> create(@PathVariable Long userId, @RequestBody OrderCreateAndUpdateDto dto) {
+    public ResponseEntity<Void> create(@RequestBody OrderCreateAndUpdateDto dto) {
         orderService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     // Delete an order by ID
-    @CheckUserId
     @DeleteMapping("/{userId}/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long userId, @PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         boolean deleted = orderService.delete(id);
         if (!deleted) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found for deletion");

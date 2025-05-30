@@ -34,7 +34,7 @@ public class UserCreateAndUpdateMapper implements Mapper<UserCreateAndUpdateDto,
         user.setOwnProducts(
                RawObject.getOwnProducts()
         );
-        user.setCarts(RawObject.getCarts());
+        user.setCart(RawObject.getCart());
         return user;
     }
 }

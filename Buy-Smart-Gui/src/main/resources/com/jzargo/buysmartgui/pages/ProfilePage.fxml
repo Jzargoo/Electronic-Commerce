@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane stylesheets="@../main.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzargo.buysmartgui.ui.ProfilePageController">
+    <top>
+        <fx:include source="../template/banner.fxml" />
+    </top>
+    <bottom>
+        <fx:include source="../template/footer.fxml" />
+    </bottom>
+   <left>
+       <VBox alignment="CENTER" spacing="20.0" styleClass="secondary-bg" BorderPane.alignment="CENTER">
+           <BorderPane.margin>
+               <Insets />
+           </BorderPane.margin>
+           <padding>
+               <Insets left="20.0" right="20.0" top="20.0" />
+           </padding>
+           <VBox alignment="CENTER">
+               <VBox.margin>
+                   <Insets />
+               </VBox.margin>
+               <ImageView fx:id="icon" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+               <Button mnemonicParsing="false" onAction="#changeIcon" styleClass="view" text="change icon" />
+           </VBox>
+           <VBox spacing="10.0">
+               <VBox.margin>
+                   <Insets bottom="10.0" />
+               </VBox.margin>
+               <Button mnemonicParsing="false" styleClass="view" text="open shop">
+                   <VBox.margin>
+                       <Insets />
+                   </VBox.margin>
+               </Button>
+               <Button mnemonicParsing="false" styleClass="view" text="statistics" />
+               <Button mnemonicParsing="false" styleClass="view" text="orders" />
+               <Button mnemonicParsing="false" styleClass="view" text="addresses" />
+           </VBox>
+       </VBox>
+   </left>
+   <center>
+       <VBox style="-fx-background-color: #181818;" BorderPane.alignment="CENTER">
+           <HBox VBox.vgrow="ALWAYS" />
+           <HBox VBox.vgrow="ALWAYS" />
+           <HBox prefHeight="100.0" prefWidth="200.0" />
+       </VBox>
+   </center>
+</BorderPane>

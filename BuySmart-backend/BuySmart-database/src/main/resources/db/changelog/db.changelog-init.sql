@@ -11,7 +11,7 @@ CREATE TABLE users
 
 CREATE TABLE products
 (
-    id          BIGSERIAL PRIMARY KEY,
+    id          BIGSERIAL PRIMARY KEY ,
     owner_id    BIGINT         NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     name        VARCHAR(255)   NOT NULL,
     description VARCHAR(1000),

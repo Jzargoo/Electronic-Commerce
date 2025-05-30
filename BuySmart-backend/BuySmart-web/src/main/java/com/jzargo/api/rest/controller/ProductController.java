@@ -1,6 +1,5 @@
 package com.jzargo.api.rest.controller;
 
-import com.jzargo.api.rest.checker.CheckUserId;
 import com.jzargo.exceptions.DataNotFoundException;
 import com.jzargo.services.ProductService;
 import com.jzargo.shared.filters.ProductFilter;
@@ -14,10 +13,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/products")
@@ -59,21 +61,27 @@ public class ProductController {
 
     // Update an existing product
     @SneakyThrows
-    @CheckUserId
-    @PutMapping("/edit/{userId}/{productId}")
+    @PutMapping("/edit/{productId}")
     public ResponseEntity<ProductDetails> update(@RequestBody ProductCreateAndUpdateDto dto,
-                                       @PathVariable Long userId,
-                                       @PathVariable Integer productId) {
+                                       @PathVariable Integer productId,
+                                                 Authentication auth) {
+        String id = ((Jwt) auth.getPrincipal()).getSubject();
+        dto.setUserId(
+                Long.valueOf(id)
+        );
         ProductDetails updatedProduct = productService.update(productId, dto);
         return ResponseEntity.ok(updatedProduct);
     }
 
     // Create a new product
     @SneakyThrows
-    @CheckUserId
     @PostMapping(path = "/edit/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductDetails> save(@ModelAttribute ProductCreateAndUpdateDto dto,
-                                               @PathVariable Long userId) {
+                                               Authentication auth) {
+        String id = ((Jwt) auth.getPrincipal()).getSubject();
+        dto.setUserId(
+                Long.valueOf(id)
+        );
         return ResponseEntity.ok(
                 productService.create(dto)
         );
@@ -90,16 +98,19 @@ public class ProductController {
     }
 
     // Delete a product by productId and userId
-    @CheckUserId
-    @DeleteMapping("/edit/{userId}/{productId}")
-    public ResponseEntity<Void> delete(@PathVariable Long userId, @PathVariable Integer productId) {
-        boolean deleted = productService.delete(productId);
-        if (deleted) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    @DeleteMapping("/edit/{productId}")
+    public ResponseEntity<Void> delete( @PathVariable Integer productId,
+                                        Authentication auth) {
+        String id = ((Jwt) auth.getPrincipal()).getSubject();
+
+        boolean deleted = productService.delete(productId,
+                    Long.valueOf(id)
+                );
+
+        return deleted ?
+                ResponseEntity.ok().build() :
+                ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
         }
-    }
 
     // Load product images for a specific product by ID
     @GetMapping("/view/images/{id}")

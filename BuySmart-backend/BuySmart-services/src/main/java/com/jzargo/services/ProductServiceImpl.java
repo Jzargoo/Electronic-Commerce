@@ -11,8 +11,10 @@ import com.jzargo.shared.model.ProductCreateAndUpdateDto;
 import com.jzargo.shared.model.ProductDetails;
 import com.jzargo.shared.model.ProductReadDto;
 import com.querydsl.core.types.Predicate;
+import com.stripe.exception.PermissionException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,9 +80,12 @@ public class ProductServiceImpl implements ProductService {
 
     }
     @Override
-    public ProductDetails update(int id, ProductCreateAndUpdateDto dto) {
+    public ProductDetails update(int id, ProductCreateAndUpdateDto dto) throws PermissionException {
         Product old = productRepository.findById(id).orElseThrow();
-
+        if (!old.getUser().getId().equals(dto.getUserId())){
+            throw new PermissionException("User cannot change product with id" + id, id + " " + dto.getUserId(),
+                    "500", 401);
+        }
         return Optional.ofNullable(productCreateAndUpdateMapper.map(dto, old))
                 .map(product -> {
                     imageStorageService.deleteProductFiles(product.getImages());
@@ -94,11 +99,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(int id, Long userId) {
         Product old = productRepository.findById(id).orElseThrow();
-        productRepository.delete(old);
-        imageStorageService.deleteProductFiles(old.getImages());
-        return productRepository.findById(id).isEmpty();
+        boolean flag = false;
+        if (old.getUser().getId().equals(userId)){
+            productRepository.delete(old);
+            imageStorageService.deleteProductFiles(old.getImages());
+            flag = productRepository.existsById(id);
+        }
+        return flag;
     }
 
     @Override
@@ -125,4 +134,5 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findThreeProductsByRandom().stream()
                 .map(productReadMapper::map).toList();
     }
+
 }

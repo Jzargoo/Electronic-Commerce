@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,9 +43,9 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public List<CartDto> findAllByUserId(Long UserId) {
-        return cartRepository.findAllByBuyerId(UserId).stream()
-                .map(cartReadMapper::map).toList();
+    public CartDto findByUserId(Long UserId) {
+        return cartRepository.findByBuyerId(UserId)
+                .map(cartReadMapper::map).orElseThrow();
     }
 
     @SneakyThrows
@@ -104,7 +103,7 @@ public class CartServiceImpl implements CartService{
 
     @Override
     public boolean clear(Long cartId) {
-        cartRepository.deleteById(cartId);
-        return cartRepository.existsById(cartId);
+            cartRepository.deleteByBuyerId(cartId);
+            return cartRepository.existsById(cartId);
     }
 }

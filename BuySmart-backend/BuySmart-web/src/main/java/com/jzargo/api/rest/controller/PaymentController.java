@@ -1,6 +1,6 @@
 package com.jzargo.api.rest.controller;
 
-import com.jzargo.api.rest.checker.CheckUserId;
+
 import com.jzargo.entity.User;
 import com.jzargo.services.PaymentService;
 import com.jzargo.services.PaymentServiceImpl;
@@ -30,7 +30,6 @@ public class PaymentController {
         this.userService = userService;
     }
 
-    @CheckUserId
     @GetMapping("/user/{userId}")
     ResponseEntity<PageResponse<PaymentReadDto>> getUserPurchases(@PathVariable Long userId, @ModelAttribute Pageable pageable){
         Page<PaymentReadDto> pages = paymentService.findAllByUserId(userId, pageable);

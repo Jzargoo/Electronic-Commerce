@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface ImageStorageService {
 
-    String storeUserFile(byte[] file);
+    String storeUserFile(byte[] file) throws IOException;
     List<String> storeProductFiles(Iterable<byte[]> files);
     byte[] getUserFile(String fileName);
     List<byte[]> getProductFiles(Iterable<String> fileName);

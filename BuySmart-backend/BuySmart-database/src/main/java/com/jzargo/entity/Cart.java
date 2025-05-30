@@ -24,8 +24,8 @@ public class Cart implements BaseEntity<Long>{
     private String name;
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "buyer_id")
+    @OneToOne
+    @JoinColumn(name="buyer_id")
     private User buyer;
 
 

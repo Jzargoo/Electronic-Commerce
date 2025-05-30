@@ -1,4 +1,5 @@
 package com.jzargo.services;
+import com.jzargo.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -28,7 +29,10 @@ public class TokenService {
                 .collect(Collectors.joining(" "));
 
         JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
-                .subject(authentication.getName())
+                .subject(
+                        ( (User)authentication.getPrincipal() )
+                                .getId().toString()
+                )
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.HOURS))
                 .issuer("self")

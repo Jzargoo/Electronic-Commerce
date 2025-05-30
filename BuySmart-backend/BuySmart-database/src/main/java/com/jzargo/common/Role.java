@@ -1,9 +1,8 @@
 package com.jzargo.common;
 
 import org.springframework.security.core.GrantedAuthority;
-
 public enum Role implements GrantedAuthority {
-    BUYER, SELLER, ADMIN;
+    GUEST, BUYER, SELLER;
 
     @Override
     public String getAuthority() {

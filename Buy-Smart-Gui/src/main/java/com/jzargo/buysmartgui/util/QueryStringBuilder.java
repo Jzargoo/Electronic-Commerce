@@ -33,12 +33,19 @@ public class QueryStringBuilder {
             sb.append("maxPrice=").append(filter.maxPrice()).append("&");
         }
 
+        if(filter.name() !=null && !filter.name().isBlank()){
+            sb.append("name=").append(filter.name()).append("&");
+        }
+
         // удалить последний &
         if (!sb.isEmpty() && sb.charAt(sb.length() - 1) == '&') {
             sb.setLength(sb.length() - 1);
         }
 
-        return sb.toString();
+        String query = sb.toString();
+        sb.delete(0, query.length());
+
+        return query;
     }
 }
 

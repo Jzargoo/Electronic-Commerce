@@ -5,6 +5,7 @@ CREATE TABLE review_images
 );
 
 CREATE TABLE user_settings(
+    id bigserial NOT NULL PRIMARY KEY ,
     user_id BIGINT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     language varchar(2) NOT NULL DEFAULT 'en',
     theme    varchar(20) NOT NULL DEFAULT 'light',

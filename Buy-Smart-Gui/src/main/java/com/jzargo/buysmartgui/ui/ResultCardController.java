@@ -1,6 +1,7 @@
 package com.jzargo.buysmartgui.ui;
 
 import com.jzargo.shared.model.ProductReadDto;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -23,5 +24,10 @@ public class ResultCardController {
         name.setText(dto.getName());
         price.setText(
                 String.valueOf(dto.getPrice()));
+    }
+
+
+    public void loadProductDetails(ActionEvent actionEvent) {
+
     }
 }

@@ -7,9 +7,15 @@ import com.jzargo.shared.model.UserReadDto;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Optional;
+
 
 @Data
 @RequestMapping("/api/users")
@@ -22,23 +28,32 @@ public class UserController {
     }
 
     // Get user by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<UserReadDto> findById(@PathVariable Long id) throws DataNotFoundException {
-        Optional<UserReadDto> userOpt = userService.findById(id);
-        return userOpt
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new DataNotFoundException("User with ID " + id + " not found"));
+    @GetMapping("/find")
+    public ResponseEntity<UserReadDto> findByUsername(@RequestParam String username) throws DataNotFoundException {
+        UserReadDto userOpt = userService.findByUsername(username);
+        return ResponseEntity.ok(userOpt);
     }
     // Update user information
-    @PutMapping("/{id}")
-    public ResponseEntity<UserReadDto> update(@PathVariable Long id, @RequestBody UserCreateAndUpdateDto dto) {
-        UserReadDto updatedUser = userService.update(id, dto);
+    @PutMapping
+    public ResponseEntity<UserReadDto> update( @RequestBody UserCreateAndUpdateDto dto,Authentication auth) {
+        Long id = Long.valueOf(
+                ((Jwt) auth.getPrincipal())
+                        .getSubject());
+        UserReadDto updatedUser = null;
+        try {
+            updatedUser = userService.update(id, dto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+        }
         return ResponseEntity.ok(updatedUser);
     }
 
     // Delete user by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @DeleteMapping()
+    public ResponseEntity<Void> delete(Authentication auth){
+        Long id = Long.valueOf(
+                ((Jwt) auth.getPrincipal())
+                        .getSubject());
         boolean deleted = userService.delete(id);
         if (deleted) {
             return ResponseEntity.noContent().build();
@@ -47,9 +62,20 @@ public class UserController {
         }
     }
 
+    @PutMapping("/icon")
+
+
     // Get user profile image
-    @GetMapping("/profileImage/{id}")
-    public ResponseEntity<byte[]> getProfileImage(@PathVariable Long id) throws DataNotFoundException {
+    @GetMapping("/profileImage")
+    public ResponseEntity<byte[]> getProfileImage() throws DataNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken ||
+                !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Long id = Long.valueOf(
+                ((Jwt) authentication.getPrincipal()).getSubject()
+        );
         byte[] image = userService.getProfileImage(id);
         if (image == null) {
             throw new DataNotFoundException("Profile image not found for user with ID " + id);

@@ -25,17 +25,16 @@ public class ImageStorageServiceImpl implements ImageStorageService{
 
     @Value("${Files.upload.user}")
     private String uploadUserDir;
-
     @Override
-    public String storeUserFile(byte[] file) {
+    public String storeUserFile(byte[] file) throws IOException {
         try {
 
             return store(uploadUserDir,file);
         } catch (IOException e) {
             log.error("Error with saving profile image: {}", e.getMessage());
-            throw new RuntimeException();
+            throw new IOException();
         } catch (Exception e){
-            return System.getenv("DUMMY");
+            return "dummy.jpg";
         }
     }
 
