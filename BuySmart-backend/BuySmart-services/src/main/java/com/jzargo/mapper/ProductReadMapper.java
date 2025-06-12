@@ -6,6 +6,7 @@ import com.jzargo.shared.model.ProductDetails;
 import com.jzargo.shared.model.ProductReadDto;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.Comparator;
 
 @Component
@@ -25,10 +26,10 @@ public class ProductReadMapper implements Mapper<Product, ProductReadDto> {
             return ProductDetails.builder()
                     .tags(object.getTags())
                     .id(object.getId())
-                    .reviewId(object.getReviews().stream()
+                    .reviewId(Collections.singletonList(object.getReviews().stream()
                             .min(Comparator.comparingDouble(Review::getRating))
                             .map(Review::getId)
-                            .orElse(null)
+                            .orElse(null))
                     )
                     .images(object.getImages())
                     .price(object.getPrice())

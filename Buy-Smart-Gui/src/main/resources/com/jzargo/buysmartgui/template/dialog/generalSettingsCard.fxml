@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane stylesheets="@../../main.css"
+            fx:controller="com.jzargo.buysmartgui.ui.template.dialog.GeneralSettingsCard"
+            xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/24">
+    <VBox spacing="10.0" styleClass="secondary-bg">
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
+        <HBox spacing="100.0" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                <Label styleClass="standard-Font-Style" text="Theme"/>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                <ChoiceBox fx:id="themePicker"/>
+            </HBox>
+        </HBox>
+        <HBox layoutX="10.0" layoutY="36.0" spacing="100.0" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                <children>
+                    <Label styleClass="standard-Font-Style" text="Currency"/>
+                </children>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                <children>
+                    <ChoiceBox fx:id="currencyPicker"/>
+                </children>
+            </HBox>
+        </HBox>
+        <HBox layoutX="10.0" layoutY="10.0" spacing="100.0" VBox.vgrow="ALWAYS">
+            <children>
+                <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label styleClass="standard-Font-Style" text="notifications"/>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                    <children>
+                        <CheckBox fx:id="notificationBox" mnemonicParsing="false"/>
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+        <HBox layoutX="10.0" layoutY="36.0" spacing="100.0" VBox.vgrow="ALWAYS">
+            <children>
+                <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label styleClass="standard-Font-Style" text="Language"/>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                    <children>
+                        <ChoiceBox fx:id="languagePicker"/>
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+    </VBox>
+</ScrollPane>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
+<VBox styleClass="secondary-bg" stylesheets="@../../main.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzargo.buysmartgui.ui.template.dialog.profileCards.ProfileCardOrdersController">
+</VBox>

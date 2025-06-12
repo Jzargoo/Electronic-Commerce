@@ -6,7 +6,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<HBox alignment="CENTER" style="-fx-background-color: #323232;" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzargo.buysmartgui.ui.BannerController">
+<HBox alignment="CENTER" style="-fx-background-color: #323232;" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzargo.buysmartgui.ui.template.BannerController">
     <HBox alignment="CENTER">
         <HBox.margin>
             <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />

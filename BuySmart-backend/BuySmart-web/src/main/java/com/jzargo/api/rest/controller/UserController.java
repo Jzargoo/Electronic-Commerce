@@ -4,6 +4,7 @@ import com.jzargo.exceptions.DataNotFoundException;
 import com.jzargo.services.UserService;
 import com.jzargo.shared.model.UserCreateAndUpdateDto;
 import com.jzargo.shared.model.UserReadDto;
+import com.jzargo.shared.model.UserSettingsDto;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
 
 
 @Data
@@ -26,12 +28,12 @@ public class UserController {
 
     // Get user by ID
     @GetMapping("/find")
-    public ResponseEntity<UserReadDto> findByUsername(@RequestParam String username) throws DataNotFoundException {
+    public ResponseEntity<UserReadDto> findByUsername(@RequestParam String username) {
         UserReadDto userOpt = userService.findByUsername(username);
         return ResponseEntity.ok(userOpt);
     }
     // Update user information
-    @PutMapping
+    @PutMapping()
     public ResponseEntity<UserReadDto> update( @RequestBody UserCreateAndUpdateDto dto,Authentication auth) {
         Long id = Long.valueOf(
                 ((Jwt) auth.getPrincipal())
@@ -59,7 +61,6 @@ public class UserController {
         }
     }
 
-    @PutMapping("/icon")
 
 
     // Get user profile image
@@ -80,5 +81,44 @@ public class UserController {
         return ResponseEntity.ok()
                 .header("Content-Type", "image/jpeg")
                 .body(image);
+    }
+    @GetMapping
+    public ResponseEntity<UserReadDto>WhoAmI(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String subject = ((Jwt) authentication.getPrincipal()).getSubject();
+        return userService.findById(
+                Long.valueOf(subject)
+        ).map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
+    }
+
+    @PutMapping("/updateUserSettings")
+    public ResponseEntity<UserSettingsDto>  updateUserSettings(Authentication authentication,
+                                                               @RequestBody UserSettingsDto dto){
+         Long id = Long.valueOf(
+                 ((Jwt) authentication.getPrincipal())
+                         .getSubject());
+
+         dto.setUserId(id);
+        UserSettingsDto userSettingsDto = null;
+
+        try {
+            userSettingsDto = userService.updateSettings(dto);
+            return ResponseEntity.ok(userSettingsDto);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+    @GetMapping("/findUserSettings")
+    public ResponseEntity<UserSettingsDto> findUserSettings(Authentication authentication){
+        Jwt principal = (Jwt) authentication.getPrincipal();
+        Long l = Long.valueOf(principal.getSubject());
+        try {
+            UserSettingsDto settingsByUserId = userService.findSettingsByUserId(l);
+            return ResponseEntity.ok(settingsByUserId);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

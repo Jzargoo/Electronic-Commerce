@@ -1,5 +1,6 @@
 package com.jzargo.buysmartgui.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jzargo.buysmartgui.errors.ProductNotFoundException;
@@ -7,11 +8,14 @@ import com.jzargo.buysmartgui.util.JWTStorage;
 import com.jzargo.buysmartgui.util.QueryStringBuilder;
 import com.jzargo.shared.filters.ProductFilter;
 import com.jzargo.shared.model.PageResponse;
+import com.jzargo.shared.model.ProductCreateAndUpdateDto;
+import com.jzargo.shared.model.ProductDetails;
 import com.jzargo.shared.model.ProductReadDto;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -78,5 +82,20 @@ public class ProductService {
         if(body == null || body.content().isEmpty()) throw new ProductNotFoundException();
 
         return body;
+    }
+
+    public ProductDetails createProduct(ProductCreateAndUpdateDto dto) throws IOException, URISyntaxException,
+            InterruptedException {
+
+        HttpRequest build = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(
+                        mapper.writeValueAsString(dto)
+                ))
+                .uri(new URI(basicUrl))
+                .header("Authorization", "Bearer " + JWTStorage.loadToken())
+                .header("Content-Type", "application/json").build();
+
+        HttpResponse<String> send = client.send(build, HttpResponse.BodyHandlers.ofString());
+        return mapper.readValue(send.body(), ProductDetails.class);
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -61,22 +62,21 @@ public class ProductController {
 
     // Update an existing product
     @SneakyThrows
-    @PutMapping("/edit/{productId}")
-    public ResponseEntity<ProductDetails> update(@RequestBody ProductCreateAndUpdateDto dto,
-                                       @PathVariable Integer productId,
+    @PutMapping
+    public ResponseEntity<ProductDetails> update(@RequestBody @Validated ProductCreateAndUpdateDto dto,
                                                  Authentication auth) {
         String id = ((Jwt) auth.getPrincipal()).getSubject();
         dto.setUserId(
                 Long.valueOf(id)
         );
-        ProductDetails updatedProduct = productService.update(productId, dto);
+        ProductDetails updatedProduct = productService.update(dto.getProductId(), dto);
         return ResponseEntity.ok(updatedProduct);
     }
 
     // Create a new product
     @SneakyThrows
-    @PostMapping(path = "/edit/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductDetails> save(@ModelAttribute ProductCreateAndUpdateDto dto,
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProductDetails> save(@RequestBody @Validated ProductCreateAndUpdateDto dto,
                                                Authentication auth) {
         String id = ((Jwt) auth.getPrincipal()).getSubject();
         dto.setUserId(

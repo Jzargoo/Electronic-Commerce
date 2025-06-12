@@ -12,6 +12,7 @@ import com.jzargo.shared.model.ProductDetails;
 import com.jzargo.shared.model.ProductReadDto;
 import com.querydsl.core.types.Predicate;
 import com.stripe.exception.PermissionException;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -69,8 +70,9 @@ public class ProductServiceImpl implements ProductService {
         if (product == null) {
             throw new IllegalStateException("Mapping resulted in null product");
         }
+        List<byte[]> images = dto.getImages().stream().map(Base64::decodeBase64).toList();
+        List<String> savedImages = imageStorageService.storeProductFiles(images);
 
-        List<String> savedImages = imageStorageService.storeProductFiles(dto.getImages());
         product.setImages(savedImages);
 
         Product savedProduct = productRepository.saveAndFlush(product);
@@ -89,7 +91,8 @@ public class ProductServiceImpl implements ProductService {
                 .map(product -> {
                     imageStorageService.deleteProductFiles(product.getImages());
 
-                    List<String> savedImages = imageStorageService.storeProductFiles(dto.getImages());
+                    List<byte[]> images = dto.getImages().stream().map(Base64::decodeBase64).toList();
+                    List<String> savedImages = imageStorageService.storeProductFiles(images);
                     product.setImages(savedImages);
                     return productRepository.saveAndFlush(product);
                 })

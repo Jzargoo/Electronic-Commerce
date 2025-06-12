@@ -31,13 +31,26 @@
     -fx-underline: false;
 }
 
-.search {
-}
-
-.LoginText {
+.AuthBackground{
+    -fx-background-image: url("Images/Auth/LoginAndRegister.jpg");
+    -fx-background-size: cover;
 }
 
 .text-area .content {
     -fx-background-color: black ;
 }
 
+.first-bg {
+    -fx-background-color:  #181818;
+}
+
+
+.less-important{
+    -fx-font-weight: lighter;
+}
+.ConfirmationButton{
+    -fx-background-color: #009fbf;
+}
+.CancelButton{
+    -fx-background-color: #FF6040;
+}

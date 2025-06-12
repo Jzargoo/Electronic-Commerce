@@ -9,12 +9,11 @@ public class AddressReadMapper implements Mapper<Address, AddressDto> {
 
     @Override
     public AddressDto map(Address address) {
-        AddressDto addressDto = new AddressDto();
-        addressDto.setStreet(address.getStreet());
-        addressDto.setCity(address.getCity());
-        addressDto.setState(address.getState());
-        addressDto.setCountry(address.getCountry());
-        addressDto.setZipCode(address.getZipCode());
-        return addressDto;
+        return AddressDto.builder()
+                .street(address.getStreet())
+                .zipCode(address.getZipCode())
+                .city(address.getCity())
+                .country(address.getCountry())
+                .build();
     }
 }

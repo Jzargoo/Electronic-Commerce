@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 <SplitPane dividerPositions="0.36789297658862874" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
            minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24"
-           xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzargo.buysmartgui.ui.LoadPageController">
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzargo.buysmartgui.ui.pages.LoadPageController">
     <BorderPane prefHeight="360.0" prefWidth="180.0">
         <top>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">

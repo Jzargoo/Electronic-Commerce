@@ -4,7 +4,7 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<HBox alignment="CENTER" prefHeight="35.0" styleClass="secondary-bg" stylesheets="@../main.css" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzargo.buysmartgui.ui.FooterController">
+<HBox alignment="CENTER" prefHeight="35.0" styleClass="secondary-bg" stylesheets="@../main.css" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzargo.buysmartgui.ui.template.FooterController">
         <children>
             <HBox alignment="CENTER_LEFT" styleClass="f" HBox.hgrow="ALWAYS">
                 <children>

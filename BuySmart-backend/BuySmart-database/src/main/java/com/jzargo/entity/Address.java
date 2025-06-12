@@ -15,11 +15,14 @@ public class Address implements BaseEntity<Long>{
     private Long id;
     private String street;
     private String city;
-    private String state;
     private String country;
     @Column(name = "zip_code")
     private String zipCode;
     @ManyToMany(mappedBy = "addresses")
     private List<UserSettings> userSettings = new ArrayList<>();
 
+    public void addUserSettings(UserSettings userSettings) {
+        this.userSettings.add(userSettings);
+        userSettings.getAddresses().add(this);
+    }
 }

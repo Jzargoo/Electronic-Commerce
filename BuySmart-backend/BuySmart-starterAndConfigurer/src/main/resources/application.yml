@@ -1,10 +1,13 @@
 spring:
+  jpa:
+    open-in-view: false
 
   config:
     import: optional:file:.env[.properties]
   datasource:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+
     url: ${DB_URL}
     driver-class-name: org.postgresql.Driver
 rsa:
@@ -26,3 +29,4 @@ Files:
     user: ${UPLOAD_DIR_USERS}
     product: ${UPLOAD_DIR_PRODUCTS}
     review: ${UPLOAD_DIR_REVIEWS}
+

@@ -18,11 +18,15 @@ public class ProductCreateAndUpdateDto {
     @Size(min = 1, message = "Tags cannot be empty")
     private List<String> tags;
     @Size(min = 1, message = "At least one image should be uploaded")
-    private List<byte[]> images;
+    //Here String is base 64 for images to send as json
+    private List<String> images;
     @NotBlank(message = "Product name cannot be empty")
     private String name;
+    @NotBlank
+    private int productId;
     @NotNull
     private Long userId;
+    @NotBlank
     private String description;
     @NotNull(message = "Product price cannot be null")
     @Positive(message = "Price must be a positive number")

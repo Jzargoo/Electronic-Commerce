@@ -20,15 +20,21 @@ public class ElectronicCommerce extends Application {
         BaseRole i;
         switch ( i = instance.checkPermission(s)){
 
-            case BaseRole.GUEST -> fxmlLoader = new FXMLLoader(ElectronicCommerce.class.getResource("pages/WelcomePage.fxml"));
-            case BaseRole.SELLER-> fxmlLoader = new FXMLLoader(ElectronicCommerce.class.getResource("pages/ShopperPage.fxml"));
-            case BaseRole.BUYER -> fxmlLoader = new FXMLLoader(ElectronicCommerce.class.getResource("pages/HomePage.fxml"));
+            case BaseRole.GUEST -> fxmlLoader = new FXMLLoader(ElectronicCommerce.class
+                    .getResource("pages/WelcomePage.fxml"));
+
+            case BaseRole.SELLER-> fxmlLoader = new FXMLLoader(ElectronicCommerce.class
+                    .getResource("pages/ShopperPage.fxml"));
+
+            case BaseRole.BUYER -> fxmlLoader = new FXMLLoader(ElectronicCommerce.class
+                    .getResource("pages/HomePage.fxml"));
 
             default ->
                     throw new IllegalStateException("Unexpected value: " + i);
         }
         Scene scene = new Scene(fxmlLoader.load(), 1000, 1000);
         stage.setTitle("Buy-Smart");
+        stage.setMaximized(true);
         stage.setScene(scene);
         stage.setResizable(true);
         stage.show();
@@ -37,4 +43,5 @@ public class ElectronicCommerce extends Application {
     public static void main(String[] args) {
         launch();
     }
+
 }

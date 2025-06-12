@@ -1,6 +1,6 @@
 package com.jzargo.api.rest.controller;
 
-import com.jzargo.services.ReviewService;
+import com.jzargo.services.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +12,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
-    private final ReviewService.CategoryService categoryService;
+    private final CategoryService categoryService;
 
-    public CategoryController(ReviewService.CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 

@@ -20,5 +20,5 @@ public class ProductDetails {
     private String name;
     private String description;
     private Double price;
-    private Long reviewId;
+    private List<Long> reviewId;
 }

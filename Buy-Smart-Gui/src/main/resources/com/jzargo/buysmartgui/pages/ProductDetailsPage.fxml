@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane stylesheets="@../main.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzargo.buysmartgui.ui.pages.ProductDetailsController">
+   <center>
+      <HBox spacing="30.0" style="-fx-background-color: #181818;" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+         </padding>
+         <VBox prefHeight="200.0" prefWidth="100.0">
+            <HBox VBox.vgrow="ALWAYS">
+               <VBox fx:id="allImages" spacing="10.0"/>
+               <ImageView fx:id="activeImage" fitHeight="250.0" fitWidth="200.0" pickOnBounds="true"
+                          preserveRatio="true"/>
+            </HBox>
+            <VBox alignment="BOTTOM_RIGHT" VBox.vgrow="ALWAYS">
+               <HBox>
+                  <Label fx:id="NameProduct" styleClass="standard-Font-Style" text="Label"/>
+               </HBox>
+               <HBox>
+                  <Label fx:id="subDescription" text="Label">
+                     <font>
+                        <Font size="11.0"/>
+                     </font>
+                     <styleClass>
+                        <String fx:value="standard-Font-Style"/>
+                        <String fx:value="less-important"/>
+                     </styleClass>
+                  </Label>
+               </HBox>
+            </VBox>
+         </VBox>
+         <VBox alignment="TOP_CENTER" spacing="10.0">
+            <VBox maxWidth="600.0" VBox.vgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="rounding"/>
+                  <String fx:value="secondary-bg"/>
+               </styleClass>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+               </padding>
+               <Label styleClass="standard-Font-Style" text="Description"/>
+               <Label fx:id="description" maxWidth="600.0" text="These field is empty" wrapText="true">
+                  <styleClass>
+                     <String fx:value="standard-Font-Style"/>
+                     <String fx:value="less-important"/>
+                  </styleClass>
+               </Label>
+            </VBox>
+            <VBox maxWidth="600.0" VBox.vgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="rounding"/>
+                  <String fx:value="secondary-bg"/>
+               </styleClass>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+               </padding>
+               <Label styleClass="standard-Font-Style" text="Reviews"/>
+               <VBox fx:id="reviewBox"/>
+            </VBox>
+            <VBox VBox.vgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="rounding"/>
+                  <String fx:value="secondary-bg"/>
+               </styleClass>
+               <Label maxWidth="600.0" styleClass="standard-Font-Style" text="Specifications">
+                  <padding>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                  </padding>
+               </Label>
+               <VBox fx:id="specificationBox"/>
+            </VBox>
+            <VBox alignment="BOTTOM_CENTER">
+               <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addToCart"
+                       styleClass="view" text="Add to Cart" VBox.vgrow="ALWAYS"/>
+            </VBox>
+         </VBox>
+      </HBox>
+   </center>
+</BorderPane>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+
+
+<HBox spacing="15.0" style="-fx-background-color: #181818;" styleClass="rounding" stylesheets="@../main.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzargo.buysmartgui.ui.template.SpecificationMapController">
+   <children>
+      <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+         <children>
+            <Label styleClass="standard-Font-Style" text="Name" />
+            <TextField fx:id="name" style="-fx-background-color: black;" styleClass="standard-Font-Style" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" HBox.hgrow="ALWAYS">
+         <children>
+            <Label styleClass="standard-Font-Style" text="Value" />
+            <TextField fx:id="value" style="-fx-background-color: black;" styleClass="standard-Font-Style" />
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+</HBox>

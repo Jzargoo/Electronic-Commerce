@@ -18,8 +18,31 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(exclude = {
+        "settings",
+        "reviews",
+        "coupons",
+        "paymentMethods",
+        "cart",
+        "OwnProducts",
+        "roles",
+        "orders",
+        "payments",
+        "password"
+})
+
+@ToString(exclude = {
+        "settings",
+        "reviews",
+        "coupons",
+        "paymentMethods",
+        "cart",
+        "OwnProducts",
+        "roles",
+        "orders",
+        "payments",
+        "password"
+})
 public class User implements BaseEntity<Long>, UserDetails {
 
     @Id

@@ -24,7 +24,7 @@ public class Coupon extends Discount {
     private Category category;
     @ManyToMany
     @JoinTable(
-            name = "users",
+            name = "user_activated_coupons",
             joinColumns = @JoinColumn(name = "coupon_id"))
     private List<User> user;
 }

@@ -1,13 +1,18 @@
 package com.jzargo.services;
 
 import com.jzargo.entity.User;
+import com.jzargo.entity.UserSettings;
 import com.jzargo.exceptions.DataNotFoundException;
 import com.jzargo.exceptions.UserAlreadyExistsException;
 import com.jzargo.mapper.UserCreateAndUpdateMapper;
 import com.jzargo.mapper.UserReadMapper;
+import com.jzargo.mapper.UserSettingsCreateAndUpdateMapper;
+import com.jzargo.mapper.UserSettingsReadMapper;
 import com.jzargo.repository.UserRepository;
+import com.jzargo.repository.UserSettingsRepository;
 import com.jzargo.shared.model.UserCreateAndUpdateDto;
 import com.jzargo.shared.model.UserReadDto;
+import com.jzargo.shared.model.UserSettingsDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,16 +32,22 @@ public class UserServiceImpl implements UserService{
     private final UserCreateAndUpdateMapper userCreateAndUpdateMapper;
     private final ImageStorageService imageStorageService;
     private final PasswordEncoder passwordEncoder;
+    private final UserSettingsRepository userSettingsRepository;
+    private final UserSettingsCreateAndUpdateMapper userSettingsCreateAndUpdateMapper;
+    private final UserSettingsReadMapper userSettingsReadMapper;
 
     public UserServiceImpl(UserRepository userRepository, UserReadMapper userReadMapper,
                            UserCreateAndUpdateMapper userCreateAndUpdateMapper,
-                           ImageStorageService imageStorageService, PasswordEncoder passwordEncoder) {
+                           ImageStorageService imageStorageService, PasswordEncoder passwordEncoder, UserSettingsRepository userSettingsRepository, UserSettingsCreateAndUpdateMapper userSettingsCreateAndUpdateMapper, UserSettingsReadMapper userSettingsReadMapper) {
 
         this.userRepository = userRepository;
         this.userReadMapper = userReadMapper;
         this.userCreateAndUpdateMapper = userCreateAndUpdateMapper;
         this.imageStorageService = imageStorageService;
         this.passwordEncoder = passwordEncoder;
+        this.userSettingsRepository = userSettingsRepository;
+        this.userSettingsCreateAndUpdateMapper = userSettingsCreateAndUpdateMapper;
+        this.userSettingsReadMapper = userSettingsReadMapper;
     }
 
     @Override
@@ -61,7 +72,22 @@ public class UserServiceImpl implements UserService{
             throw new UserAlreadyExistsException();
         }
         User user = userRepository.saveAndFlush(map);
+        initializeUserSettingsByDefault(user.getId());
         return userReadMapper.map(user);
+    }
+
+    private void initializeUserSettingsByDefault(Long userId) {
+        UserSettingsDto build = UserSettingsDto.builder()
+                .currency("USD")
+                .language("en")
+                .userId(userId)
+                .theme("black")
+                .notificationsEnabled(true)
+                .build();
+
+        UserSettings userSettings = userSettingsRepository.saveAndFlush(
+                userSettingsCreateAndUpdateMapper.map(build)
+        );
     }
 
     @Override
@@ -117,6 +143,20 @@ public class UserServiceImpl implements UserService{
         );
     }
 
+    @Override
+    public UserSettingsDto findSettingsByUserId(Long l) throws DataNotFoundException {
+        return userSettingsRepository.findByUserId(l)
+                .map(userSettingsReadMapper::map)
+                .orElseThrow(DataNotFoundException::new);
+    }
+
+    @Override
+    public UserSettingsDto updateSettings(UserSettingsDto dto) throws DataNotFoundException {
+         return Optional.of(userSettingsCreateAndUpdateMapper.map(dto))
+                .map(userSettingsRepository::saveAndFlush)
+                .map(userSettingsReadMapper::map)
+                .orElseThrow(DataNotFoundException::new);
+    }
 
 
     @Override

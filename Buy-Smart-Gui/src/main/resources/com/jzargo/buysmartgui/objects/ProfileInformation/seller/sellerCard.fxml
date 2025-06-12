@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<HBox spacing="15.0" stylesheets="@../../../main.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzargo.buysmartgui.ui.template.SellerCardController">
+   <children>
+      <VBox>
+         <children>
+            <Label styleClass="standard-Font-Style" text="Brand: Name of a shop" />
+            <TextField fx:id="nameShop" style="-fx-background-color: black; -fx-border-color: white;">
+               <styleClass>
+                  <String fx:value="rounding" />
+                  <String fx:value="standard-Font-Style" />
+               </styleClass>
+            </TextField>
+            <Label styleClass="standard-Font-Style" text="Description" />
+            <TextArea styleClass="standard-Font-Style" fx:id="description"/>
+         </children>
+      </VBox>
+      <VBox>
+         <children>
+            <Label styleClass="standard-Font-Style" text="Selling product's categories " />
+            <ListView prefHeight="245.0" prefWidth="248.0" fx:id="categories" style="-fx-background-color: black; -fx-border-color: white;">
+               <styleClass>
+                  <String fx:value="standard-Font-Style" />
+                  <String fx:value="rounding" />
+               </styleClass>
+            </ListView>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+   <styleClass>
+      <String fx:value="rounding" />
+      <String fx:value="secondary-bg" />
+   </styleClass>
+</HBox>
